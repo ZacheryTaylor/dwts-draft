@@ -55,7 +55,7 @@ footer {
 
 h1,
 h2 {
-  color: #8c315f;
+  color: #fd7185;
   font-family: "Great Vibes", cursive;
   font-weight: 400;
 }
@@ -128,7 +128,7 @@ button.oops {
 
 button.reset {
   border-color: #dea7b7;
-  color: #8c315f;
+  color: #fd7185;
   background: #fff;
 }
 
