@@ -239,7 +239,7 @@ select {
   grid-template-columns: repeat(var(--team-count), minmax(0, 1fr));
   grid-template-rows: repeat(8, minmax(0, 1fr));
   grid-auto-flow: column;
-  column-gap: 10px;
+  column-gap: 15px;
 }
 
 .board-team-column {
