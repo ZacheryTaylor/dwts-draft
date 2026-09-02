@@ -6,7 +6,7 @@
   --pink-light: #ffe5ef;
   --blue: #4788cb;
   --blue-dark: #2866a5;
-  --blue-light: #e4f1ff;
+  --pro-pink: #fe637f;
   --discopink: #fd7185;
   --muted: #946277;
   --gold: #bc8618;
@@ -356,7 +356,7 @@ select {
 }
 
 .dancer-half.pro {
-  background: var(--blue-light);
+  background: var(--pro-pink);
 }
 
 .role-chip {
@@ -484,7 +484,7 @@ th {
 
 .roster-chip.pro {
   color: var(--blue-dark);
-  background: var(--blue-light);
+  background: var(--pro-pink);
 }
 
 footer {
