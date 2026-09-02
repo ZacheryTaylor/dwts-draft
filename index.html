@@ -1,38 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DWTS Draft</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css" />
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Draft the Stars</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div class="sparkle" aria-hidden="true"></div>
-  <header class="top">
-    <div class="brand">
-      <p class="kicker">Dancing with the Stars</p>
-      <h1>DWTS Draft</h1>
-      <p class="tagline">Draft dancers. Track scores. See who is winning.</p>
-    </div>
-    <nav>
-      <button data-view="rankings" class="active">Rankings</button>
-      <button data-view="draft">Draft</button>
-      <button data-view="scores">Scores</button>
-      <button data-view="league">League</button>
-    </nav>
-  </header>
-  <main>
-    <section id="view-rankings" class="view"></section>
-    <section id="view-draft" class="view hidden"></section>
-    <section id="view-scores" class="view hidden"></section>
-    <section id="view-league" class="view hidden"></section>
-  </main>
-  <footer>
-    <p>4 pros + 4 amateurs · two copies of each dancer · no duplicate copies on one team</p>
-  </footer>
-  <script src="js/app.js"></script>
-</body>
-</html>
+<header class="top"><div><p class="kicker">Dancing with the Stars</p><h1>Draft the Stars</h1><p class="tagline">Draft dancers · track scores · chase the mirrorball</p></div><nav><button data-view="rankings" class="active">Rankings</button><button data-view="draft">Draft</button><button data-view="scores">Scores</button><button data-view="league">League Setup</button></nav></header>
+<main><section id="view-rankings"></section><section id="view-draft" class="hidden"></section><section id="view-scores" class="hidden"></section><section id="view-league" class="hidden"></section></main>
+<footer>Two copies of each dancer · 4 amateurs + 4 pros per team · snake draft</footer>
+<script src="js/app.js"></script>
+</body></html>
