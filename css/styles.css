@@ -77,7 +77,7 @@ h3 {
 .tagline,
 .muted,
 .partner-name {
-  color: var(--muted);
+  color: var(--white);
 }
 
 nav,
