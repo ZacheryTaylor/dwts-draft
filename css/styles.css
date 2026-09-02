@@ -232,9 +232,9 @@ select {
 .board-overlay {
   position: absolute;
   top: 27%;
-  right: 6.8%;
+  right: 3%;
   bottom: 3.1%;
-  left: 6.8%;
+  left: 3%;
   display: grid;
   grid-template-columns: repeat(var(--team-count), minmax(0, 1fr));
   grid-template-rows: repeat(8, minmax(0, 1fr));
