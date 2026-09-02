@@ -370,7 +370,7 @@ select {
 }
 
 .dancer-half.amateur .role-chip { color: var(--pink-dark); }
-.dancer-half.pro .role-chip { color: var(--blue-dark); }
+.dancer-half.pro .role-chip { color: var(--white); }
 
 .dancer-half strong {
   min-height: 33px;
