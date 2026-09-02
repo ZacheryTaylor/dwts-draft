@@ -5,7 +5,7 @@
   --blue: #4788cb;
   --blue-dark: #2866a5;
   --blue-light: #e4f1ff;
-  --purple: #54203e;
+  --discopink: #fd7185;
   --muted: #946277;
   --gold: #bc8618;
   --line: #f3bad0;
@@ -18,7 +18,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  color: var(--purple);
+  color: var(--discopink);
   font-family: Quicksand, Arial, sans-serif;
   background:
     radial-gradient(850px 390px at 5% -10%, #ffc8df 0%, transparent 58%),
@@ -96,7 +96,7 @@ button,
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 9px 14px;
-  color: var(--purple);
+  color: var(--discopink);
   background: var(--white);
   box-shadow: 0 5px 12px rgba(164, 66, 114, 0.08);
   font: 700 13px Quicksand, Arial, sans-serif;
@@ -158,7 +158,7 @@ select {
   padding: 8px 10px;
   border: 1px solid var(--line);
   border-radius: 10px;
-  color: var(--purple);
+  color: var(--discopink);
   background: var(--white);
   font: inherit;
 }
@@ -376,7 +376,7 @@ select {
 .dancer-half strong {
   min-height: 33px;
   overflow: hidden;
-  color: var(--purple);
+  color: var(--discopink);
   font-size: 13px;
   line-height: 1.15;
 }
