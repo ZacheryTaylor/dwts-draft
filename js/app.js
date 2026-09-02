@@ -1,620 +1,510 @@
-const STORAGE_KEY = "draft-the-stars-leagues-v1";
-const RESET_CODE = "0000";
+const STORAGE_KEY = 'dwts-draft-v3';
+const RESET_CODE = '0000';
 
 let season;
-let scoreData;
-let store;
-let activeLeagueId;
-let poolFilter = "all";
+let scores;
+let league;
+let activeView = 'rankings';
+let playerFilter = 'all';
 
 const $ = (id) => document.getElementById(id);
-const escapeHtml = (value) => String(value ?? "")
-  .replaceAll("&", "&amp;")
-  .replaceAll("<", "&lt;")
-  .replaceAll(">", "&gt;")
-  .replaceAll('"', "&quot;")
-  .replaceAll("'", "&#039;");
 
-function uid(prefix = "id") {
-  return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+function id(prefix) {
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-function newLeague(name = "") {
+function safe(text) {
+  return String(text ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function freshLeague() {
   return {
-    id: uid("league"),
-    name,
+    name: '',
     teams: [],
     picks: [],
-    status: "setup",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    started: false,
+    paused: false,
+    completed: false
   };
 }
 
-function defaultStore() {
-  const league = newLeague("");
-  return { leagues: [league], activeLeagueId: league.id };
-}
-
-function loadStore() {
+function loadLeague() {
   try {
-    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (parsed?.leagues?.length) return parsed;
-  } catch (_) {}
-  return defaultStore();
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || freshLeague();
+  } catch {
+    return freshLeague();
+  }
 }
 
-function saveStore() {
-  store.activeLeagueId = activeLeagueId;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+function saveLeague() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(league));
 }
 
-function activeLeague() {
-  return store.leagues.find((league) => league.id === activeLeagueId) || store.leagues[0];
-}
-
-function touch() {
-  activeLeague().updatedAt = new Date().toISOString();
-  saveStore();
-}
-
-function dancers() {
+function allDancers() {
   return season.couples.flatMap((couple) => [
     {
       ...couple.amateur,
-      role: "amateur",
       coupleId: couple.id,
-      partnerName: couple.pro.name
+      partner: couple.pro.name,
+      role: 'amateur'
     },
     {
       ...couple.pro,
-      role: "pro",
       coupleId: couple.id,
-      partnerName: couple.amateur.name
+      partner: couple.amateur.name,
+      role: 'pro'
     }
   ]);
 }
 
-function dancerById(dancerId) {
-  return dancers().find((dancer) => dancer.id === dancerId);
+function dancer(dancerId) {
+  return allDancers().find((person) => person.id === dancerId);
 }
 
-function totalCopies() {
+function copiesPerDancer() {
   return Number(season.copiesPerDancer || 2);
 }
 
-function rosterSize(role) {
+function rosterLimit(role) {
   return Number(season.rosterSize?.[role] || 4);
 }
 
-function teamById(teamId) {
-  return activeLeague().teams.find((team) => team.id === teamId);
+function team(teamId) {
+  return league.teams.find((item) => item.id === teamId);
 }
 
-function roster(teamId) {
-  return activeLeague().picks
+function teamPicks(teamId) {
+  return league.picks
     .filter((pick) => pick.teamId === teamId)
-    .map((pick) => ({ ...pick, ...dancerById(pick.dancerId) }));
+    .map((pick) => ({ ...pick, ...dancer(pick.dancerId) }));
 }
 
-function teamRoleCount(teamId, role) {
-  return roster(teamId).filter((pick) => pick.role === role).length;
+function countRole(teamId, role) {
+  return teamPicks(teamId).filter((pick) => pick.role === role).length;
 }
 
-function copiesTaken(dancerId) {
-  return activeLeague().picks.filter((pick) => pick.dancerId === dancerId).length;
+function copiesUsed(dancerId) {
+  return league.picks.filter((pick) => pick.dancerId === dancerId).length;
 }
 
-function teamOwnsDancer(teamId, dancerId) {
-  return activeLeague().picks.some(
-    (pick) => pick.teamId === teamId && pick.dancerId === dancerId
-  );
+function teamAlreadyHas(teamId, dancerId) {
+  return league.picks.some((pick) => pick.teamId === teamId && pick.dancerId === dancerId);
 }
 
 function draftOrder() {
-  const league = activeLeague();
-  const teams = league.teams.map((team) => team.id);
-  const totalPicks = teams.length * (rosterSize("amateur") + rosterSize("pro"));
-  const picks = [];
+  const ids = league.teams.map((item) => item.id);
+  const total = ids.length * (rosterLimit('amateur') + rosterLimit('pro'));
+  const order = [];
 
-  if (!teams.length) return picks;
+  if (!ids.length) return order;
 
-  for (let round = 0; picks.length < totalPicks; round += 1) {
-    const order = round % 2 === 0 ? teams : [...teams].reverse();
-    for (const teamId of order) {
-      if (picks.length >= totalPicks) break;
-      picks.push(teamId);
-    }
+  for (let round = 0; order.length < total; round += 1) {
+    const thisRound = round % 2 === 0 ? ids : [...ids].reverse();
+    thisRound.forEach((teamId) => {
+      if (order.length < total) order.push(teamId);
+    });
   }
-
-  return picks;
+  return order;
 }
 
-function currentPickNumber() {
-  return activeLeague().picks.length + 1;
-}
-
-function onClockTeamId() {
-  const league = activeLeague();
-  if (league.status !== "live") return null;
+function onClockId() {
+  if (!league.started || league.paused || league.completed) return null;
   return draftOrder()[league.picks.length] || null;
 }
 
 function onClockTeam() {
-  return teamById(onClockTeamId());
+  return team(onClockId());
 }
 
-function roundForPick(pickIndex) {
-  const teamCount = activeLeague().teams.length || 1;
-  return Math.floor(pickIndex / teamCount) + 1;
+function currentRound() {
+  return Math.floor(league.picks.length / Math.max(league.teams.length, 1)) + 1;
 }
 
-function isEligible(dancer) {
-  const teamId = onClockTeamId();
-  if (!teamId || !dancer) return false;
-  if (copiesTaken(dancer.id) >= totalCopies()) return false;
-  if (teamOwnsDancer(teamId, dancer.id)) return false;
-  if (teamRoleCount(teamId, dancer.role) >= rosterSize(dancer.role)) return false;
+function canDraft(dancerId) {
+  const person = dancer(dancerId);
+  const teamId = onClockId();
+  if (!person || !teamId) return false;
+  if (copiesUsed(dancerId) >= copiesPerDancer()) return false;
+  if (teamAlreadyHas(teamId, dancerId)) return false;
+  if (countRole(teamId, person.role) >= rosterLimit(person.role)) return false;
   return true;
 }
 
-function createLeague() {
-  const name = prompt("New league name?");
-  if (!name?.trim()) return;
-  const league = newLeague(name.trim());
-  store.leagues.push(league);
-  activeLeagueId = league.id;
-  saveStore();
-  render();
-}
-
-function selectLeague(value) {
-  if (value === "new") {
-    createLeague();
-    return;
-  }
-  activeLeagueId = value;
-  saveStore();
-  render();
-}
-
 function addTeam() {
-  const league = activeLeague();
-  if (league.status !== "setup") return;
+  if (league.started) return;
   if (league.teams.length >= 8) {
-    alert("This visual board supports up to 8 teams.");
+    alert('The included board design has room for up to 8 teams.');
     return;
   }
-  league.teams.push({ id: uid("team"), name: `Team ${league.teams.length + 1}` });
-  touch();
+  league.teams.push({ id: id('team'), name: `Team ${league.teams.length + 1}` });
+  saveLeague();
   render();
 }
 
 function removeTeam(teamId) {
-  const league = activeLeague();
-  if (league.status !== "setup") return;
-  league.teams = league.teams.filter((team) => team.id !== teamId);
-  touch();
+  if (league.started) return;
+  league.teams = league.teams.filter((item) => item.id !== teamId);
+  saveLeague();
   render();
 }
 
 function moveTeam(index, direction) {
-  const league = activeLeague();
-  if (league.status !== "setup") return;
-  const next = index + direction;
-  if (next < 0 || next >= league.teams.length) return;
-  [league.teams[index], league.teams[next]] = [league.teams[next], league.teams[index]];
-  touch();
+  if (league.started) return;
+  const target = index + direction;
+  if (target < 0 || target >= league.teams.length) return;
+  [league.teams[index], league.teams[target]] = [league.teams[target], league.teams[index]];
+  saveLeague();
   render();
 }
 
 function saveSetup() {
-  const league = activeLeague();
-  if (league.status !== "setup") return;
-
-  const name = $("league-name")?.value.trim();
-  league.name = name || "";
-
-  league.teams.forEach((team) => {
-    const input = $(`team-name-${team.id}`);
-    if (input) team.name = input.value.trim();
+  if (league.started) return;
+  league.name = $('league-name')?.value.trim() || '';
+  league.teams.forEach((item) => {
+    const field = $(`team-${item.id}`);
+    if (field) item.name = field.value.trim();
   });
-
-  touch();
-  render();
+  saveLeague();
 }
 
-function leagueReady() {
-  const league = activeLeague();
-  return Boolean(
-    league.name.trim() &&
-    league.teams.length >= 2 &&
-    league.teams.every((team) => team.name.trim())
-  );
+function setupComplete() {
+  return league.name.length > 0 && league.teams.length >= 2 && league.teams.every((item) => item.name.length > 0);
 }
 
 function startDraft() {
   saveSetup();
-  const league = activeLeague();
-  if (!leagueReady()) {
-    alert("Give the league a name, add at least two teams, and name each team first.");
+  if (!setupComplete()) {
+    alert('Enter a draft name, add at least two teams, and give every team a name.');
+    render();
     return;
   }
-  league.status = "live";
-  touch();
+  league.started = true;
+  league.paused = false;
+  league.completed = false;
+  saveLeague();
+  render();
+  showView('draft');
+}
+
+function draftCopy(dancerId) {
+  if (!canDraft(dancerId)) return;
+
+  const person = dancer(dancerId);
+  const clock = onClockTeam();
+  const copy = copiesUsed(dancerId) + 1;
+
+  if (!confirm(`Draft ${person.name} (copy ${copy}) to ${clock.name}?`)) return;
+
+  league.picks.push({
+    id: id('pick'),
+    overall: league.picks.length + 1,
+    round: currentRound(),
+    teamId: clock.id,
+    dancerId,
+    copy
+  });
+
+  if (league.picks.length === draftOrder().length) {
+    league.completed = true;
+  }
+
+  saveLeague();
+  render();
+}
+
+function undoPick() {
+  if (!league.picks.length) {
+    alert('No picks have been made yet.');
+    return;
+  }
+  const last = league.picks.at(-1);
+  const person = dancer(last.dancerId);
+  if (!confirm(`Undo ${person.name}, copy ${last.copy}?`)) return;
+
+  league.picks.pop();
+  league.completed = false;
+  league.paused = false;
+  saveLeague();
   render();
 }
 
 function pauseDraft() {
-  const league = activeLeague();
-  if (league.status !== "live") return;
-  league.status = "paused";
-  touch();
+  league.paused = true;
+  saveLeague();
   render();
 }
 
 function resumeDraft() {
-  const league = activeLeague();
-  if (league.status !== "paused") return;
-  league.status = "live";
-  touch();
-  render();
-}
-
-function chooseDancer(dancerId) {
-  const dancer = dancerById(dancerId);
-  const team = onClockTeam();
-
-  if (!dancer || !team || !isEligible(dancer)) return;
-
-  const remainingBefore = totalCopies() - copiesTaken(dancer.id);
-  const message = `Draft ${dancer.name} to ${team.name}?\n\n${dancer.role === "amateur" ? "Celebrity / amateur" : "Professional dancer"}\n${remainingBefore} copy${remainingBefore === 1 ? "" : "ies"} available before this pick.`;
-  if (!confirm(message)) return;
-
-  const pickIndex = activeLeague().picks.length;
-  activeLeague().picks.push({
-    id: uid("pick"),
-    dancerId: dancer.id,
-    teamId: team.id,
-    role: dancer.role,
-    copy: copiesTaken(dancer.id) + 1,
-    overall: pickIndex + 1,
-    round: roundForPick(pickIndex),
-    createdAt: new Date().toISOString()
-  });
-
-  if (activeLeague().picks.length >= draftOrder().length) {
-    activeLeague().status = "complete";
-  }
-
-  touch();
-  render();
-}
-
-function undoLastPick() {
-  const league = activeLeague();
-  if (!league.picks.length) {
-    alert("There are no picks to undo.");
-    return;
-  }
-
-  const last = league.picks[league.picks.length - 1];
-  const dancer = dancerById(last.dancerId);
-  const team = teamById(last.teamId);
-
-  if (!confirm(`Undo ${dancer?.name || "this dancer"} from ${team?.name || "this team"}?`)) return;
-  league.picks.pop();
-  league.status = "live";
-  touch();
-  render();
-}
-
-function rewindToPick(overall) {
-  const league = activeLeague();
-  const pick = league.picks.find((item) => item.overall === overall);
-  if (!pick) return;
-
-  const dancer = dancerById(pick.dancerId);
-  if (!confirm(`Rewind to Pick ${overall}: ${dancer?.name || "selected dancer"}? This removes this pick and every pick after it.`)) return;
-
-  league.picks = league.picks.filter((item) => item.overall < overall);
-  league.status = "live";
-  touch();
+  league.paused = false;
+  saveLeague();
   render();
 }
 
 function resetLeague() {
-  const typed = prompt("Enter the reset code:");
+  const typed = prompt('Enter reset code:');
   if (typed === null) return;
   if (typed !== RESET_CODE) {
-    alert("Incorrect reset code. No changes were made.");
+    alert('Incorrect code. Nothing was reset.');
     return;
   }
-  if (!confirm("Reset this league? All picks will be permanently removed.")) return;
+  if (!confirm('Reset this league? All drafted players will be removed.')) return;
 
-  const league = activeLeague();
-  league.picks = [];
-  league.status = "setup";
-  touch();
+  league = freshLeague();
+  saveLeague();
   render();
+  showView('league');
 }
 
-function exportLeague() {
-  const league = activeLeague();
-  const payload = JSON.stringify({ season, scores: scoreData, league }, null, 2);
-  const file = new Blob([payload], { type: "application/json" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(file);
-  link.download = `${(league.name || "draft-the-stars").replace(/[^a-z0-9]+/gi, "-").toLowerCase()}.json`;
-  link.click();
-  URL.revokeObjectURL(link.href);
+function coupleScorePoints(score, weekValue) {
+  return (Number(score) / 30) * Number(weekValue);
 }
 
-function importLeague(file) {
-  const reader = new FileReader();
-  reader.onload = () => {
-    try {
-      const payload = JSON.parse(reader.result);
-      if (!payload?.league?.id) throw new Error("Invalid file");
-      const imported = { ...payload.league, id: uid("league") };
-      store.leagues.push(imported);
-      activeLeagueId = imported.id;
-      saveStore();
-      render();
-    } catch (_) {
-      alert("That does not appear to be a valid Draft the Stars league file.");
-    }
-  };
-  reader.readAsText(file);
-}
-
-function eliminated(coupleId) {
-  return (scoreData.weeks || []).some((week) =>
+function isAlive(coupleId) {
+  return !(scores.weeks || []).some((week) =>
     (week.results || []).some((result) => result.coupleId === coupleId && result.eliminated)
   );
 }
 
-function teamPoints(teamId) {
-  return (scoreData.weeks || []).reduce((total, week) => {
-    const roundValue = season.roundValues?.[week.week - 1] || 0;
-    const rosterPoints = roster(teamId).reduce((sum, dancer) => {
-      const result = (week.results || []).find((row) => row.coupleId === dancer.coupleId);
-      return sum + (result ? (Number(result.score) / 30) * roundValue : 0);
+function scoreForTeam(teamId) {
+  return (scores.weeks || []).reduce((total, week) => {
+    const value = season.roundValues?.[week.week - 1] || 0;
+    return total + teamPicks(teamId).reduce((sum, pick) => {
+      const result = (week.results || []).find((item) => item.coupleId === pick.coupleId);
+      return sum + (result ? coupleScorePoints(result.score, value) : 0);
     }, 0);
-    return total + rosterPoints;
   }, 0);
 }
 
-function maxPossiblePoints(teamId) {
-  const latestWeek = Math.max(0, ...(scoreData.weeks || []).map((week) => Number(week.week) || 0));
-  let total = teamPoints(teamId);
-
-  roster(teamId).forEach((dancer) => {
-    if (eliminated(dancer.coupleId)) return;
-    for (let index = latestWeek; index < (season.roundValues || []).length; index += 1) {
-      total += season.roundValues[index];
-    }
+function maxPossible(teamId) {
+  const latestWeek = Math.max(0, ...(scores.weeks || []).map((week) => Number(week.week) || 0));
+  let total = scoreForTeam(teamId);
+  teamPicks(teamId).filter((pick) => isAlive(pick.coupleId)).forEach(() => {
+    season.roundValues.slice(latestWeek).forEach((value) => { total += value; });
   });
-
   return total;
 }
 
-function renderLeaguePicker() {
-  const select = $("league-picker");
-  if (!select) return;
-  select.innerHTML = store.leagues.map((league) =>
-    `<option value="${league.id}" ${league.id === activeLeagueId ? "selected" : ""}>${escapeHtml(league.name || "Untitled league")}</option>`
-  ).join("") + '<option value="new">＋ Create new league</option>';
-  select.onchange = (event) => selectLeague(event.target.value);
+function roleLabel(role) {
+  return role === 'amateur' ? 'Amateur' : 'Pro';
 }
 
-function renderSetup() {
-  const league = activeLeague();
-  const locked = league.status !== "setup";
-  $("view-league").innerHTML = `
-    <div class="card setup-card">
-      <div class="section-title"><div><p class="eyebrow">Commissioner controls</p><h2>League setup</h2></div><span class="status ${league.status}">${league.status}</span></div>
-      <label>League name<input id="league-name" value="${escapeHtml(league.name)}" placeholder="Example: Girls' DWTS Draft" ${locked ? "disabled" : ""}></label>
-      <p class="muted">The saved league name appears on the rankings page and in the top-right league selector.</p>
-      <h3>Round 1 draft order</h3>
-      <p class="muted">Top to bottom is Round 1. The order automatically reverses every round for a snake draft.</p>
-      <div class="team-list">
-        ${league.teams.map((team, index) => `
-          <div class="team-row">
-            <span class="pick-badge">${index + 1}</span>
-            <input id="team-name-${team.id}" value="${escapeHtml(team.name)}" ${locked ? "disabled" : ""}>
-            <button data-up="${index}" ${locked || index === 0 ? "disabled" : ""} aria-label="Move up">↑</button>
-            <button data-down="${index}" ${locked || index === league.teams.length - 1 ? "disabled" : ""} aria-label="Move down">↓</button>
-            <button class="danger-mini" data-remove="${team.id}" ${locked ? "disabled" : ""}>Remove</button>
-          </div>
-        `).join("")}
+function renderBoard() {
+  const rounds = Array.from({ length: 8 }, (_, index) => index + 1);
+  const columns = league.teams.map((item) => `
+    <div class="board-team-column">
+      <div class="board-team-name">${safe(item.name)}</div>
+      ${rounds.map((round) => {
+        const pick = league.picks.find((entry) => entry.teamId === item.id && entry.round === round);
+        const person = pick ? dancer(pick.dancerId) : null;
+        return `<div class="board-slot ${person?.role || 'empty'}">${person ? `<b>${safe(person.name)}</b><span>${roleLabel(person.role)}</span>` : ''}</div>`;
+      }).join('')}
+    </div>
+  `).join('');
+
+  return `
+    <div class="board-scroll">
+      <div class="draft-board">
+        <img src="1.png" alt="Draft the Stars draft board" class="board-image">
+        <div class="board-overlay" style="--team-count:${Math.max(league.teams.length, 1)}">${columns}</div>
       </div>
-      <div class="row controls">
-        <button id="save-setup" ${locked ? "disabled" : ""}>Save setup</button>
-        <button id="add-team" ${locked || league.teams.length >= 8 ? "disabled" : ""}>Add team</button>
-        <button class="primary" id="start-draft" ${locked ? "disabled" : ""}>Start Draft</button>
-        <button id="export-league">Export league</button>
-        <label class="file">Import league<input id="import-league" type="file" accept="application/json" hidden></label>
+    </div>
+  `;
+}
+
+function copyButton(person, copy) {
+  const taken = league.picks.some((pick) => pick.dancerId === person.id && pick.copy === copy);
+  const clickable = !taken && canDraft(person.id);
+  return `<button class="copy-button ${taken ? 'picked' : ''}" data-dancer="${person.id}" data-copy="${copy}" ${clickable ? '' : 'disabled'}>${taken ? 'Picked' : `Draft ${copy}`}</button>`;
+}
+
+function dancerHalf(person) {
+  const used = copiesUsed(person.id);
+  const fullyDrafted = used >= copiesPerDancer();
+  return `
+    <div class="dancer-half ${person.role} ${fullyDrafted ? 'fully-drafted' : ''}">
+      <span class="role-chip">${roleLabel(person.role)}</span>
+      <strong>${safe(person.name)}</strong>
+      <span class="partner-name">Partner: ${safe(person.partner)}</span>
+      <div class="copy-buttons">
+        ${copyButton(person, 1)}
+        ${copyButton(person, 2)}
+      </div>
+      <span class="availability ${fullyDrafted ? 'gone' : used ? 'one-left' : ''}">${fullyDrafted ? 'All copies selected' : used ? '1 copy remaining' : '2 copies available'}</span>
+    </div>
+  `;
+}
+
+function renderPool() {
+  return season.couples.map((couple) => {
+    const people = [
+      { ...couple.amateur, role: 'amateur', partner: couple.pro.name },
+      { ...couple.pro, role: 'pro', partner: couple.amateur.name }
+    ].filter((person) => playerFilter === 'all' || playerFilter === person.role);
+
+    if (!people.length) return '';
+
+    return `
+      <article class="couple-bubble">
+        <div class="couple-heading">${safe(couple.amateur.name)} <span>×</span> ${safe(couple.pro.name)}</div>
+        <div class="couple-halves">${people.map(dancerHalf).join('')}</div>
+      </article>
+    `;
+  }).join('');
+}
+
+function renderDraft() {
+  const clock = onClockTeam();
+  const pickNumber = league.picks.length + 1;
+  const status = league.completed
+    ? 'Draft complete'
+    : league.paused
+      ? 'Draft paused'
+      : league.started
+        ? `On the clock: ${clock?.name || ''}`
+        : 'Draft has not started';
+
+  $('view-draft').innerHTML = `
+    <div class="card draft-status-card">
+      <div>
+        <p class="eyebrow">${league.started ? `Pick ${pickNumber} · Round ${currentRound()}` : 'Commissioner draft room'}</p>
+        <h2>${safe(status)}</h2>
+        <p class="muted">${league.started && clock ? `${clock.name}: ${countRole(clock.id, 'amateur')}/4 amateurs · ${countRole(clock.id, 'pro')}/4 pros` : 'Set up the league, set the order, then start the snake draft.'}</p>
+      </div>
+      <div class="draft-toolbar">
+        ${!league.started ? `<button class="primary" id="start-from-draft" ${setupComplete() ? '' : 'disabled'}>Start Draft</button>` : ''}
+        ${league.started && !league.completed && !league.paused ? '<button id="pause-draft">Pause</button>' : ''}
+        ${league.paused ? '<button class="primary" id="resume-draft">Resume</button>' : ''}
+        ${league.started && league.picks.length ? '<button class="oops" id="undo-pick">OOPS · Undo last pick</button>' : ''}
+        <button class="reset" id="reset-league">Reset league</button>
+      </div>
+    </div>
+    ${renderBoard()}
+    <div class="card pool-header">
+      <div><h2>Available dancers</h2><p class="muted">Click Draft 1 or Draft 2 for the dancer copy being selected. A picked button greys out; both picks grey out the entire dancer half.</p></div>
+      <label>Show<select id="player-filter"><option value="all">All dancers</option><option value="amateur">Amateurs</option><option value="pro">Pros</option></select></label>
+    </div>
+    <div class="couple-grid">${renderPool()}</div>
+  `;
+
+  $('player-filter').value = playerFilter;
+  $('player-filter').onchange = (event) => {
+    playerFilter = event.target.value;
+    renderDraft();
+  };
+  if ($('start-from-draft')) $('start-from-draft').onclick = startDraft;
+  if ($('pause-draft')) $('pause-draft').onclick = pauseDraft;
+  if ($('resume-draft')) $('resume-draft').onclick = resumeDraft;
+  if ($('undo-pick')) $('undo-pick').onclick = undoPick;
+  $('reset-league').onclick = resetLeague;
+  $('view-draft').querySelectorAll('[data-dancer]').forEach((button) => {
+    button.onclick = () => draftCopy(button.dataset.dancer);
+  });
+}
+
+function renderLeague() {
+  const locked = league.started;
+  $('view-league').innerHTML = `
+    <div class="card">
+      <p class="eyebrow">Before the draft</p>
+      <h2>League setup</h2>
+      <label>Draft name<input id="league-name" value="${safe(league.name)}" placeholder="Example: Girls' DWTS Draft" ${locked ? 'disabled' : ''}></label>
+      <p class="muted">The draft name is shown at the top of Rankings.</p>
+      <h3>First-round order</h3>
+      <p class="muted">Top to bottom is Round 1. The order reverses automatically in every following round.</p>
+      <div class="team-setup-list">
+        ${league.teams.map((item, index) => `
+          <div class="team-setup-row">
+            <span class="order-number">${index + 1}</span>
+            <input id="team-${item.id}" value="${safe(item.name)}" ${locked ? 'disabled' : ''}>
+            <button data-up="${index}" ${locked || index === 0 ? 'disabled' : ''}>↑</button>
+            <button data-down="${index}" ${locked || index === league.teams.length - 1 ? 'disabled' : ''}>↓</button>
+            <button data-remove="${item.id}" ${locked ? 'disabled' : ''}>Remove</button>
+          </div>
+        `).join('')}
+      </div>
+      <div class="row">
+        <button id="save-setup" ${locked ? 'disabled' : ''}>Save setup</button>
+        <button id="add-team" ${locked || league.teams.length >= 8 ? 'disabled' : ''}>Add team</button>
+        <button class="primary" id="start-draft" ${locked ? 'disabled' : ''}>Start Draft</button>
       </div>
     </div>
   `;
 
-  $("save-setup").onclick = saveSetup;
-  $("add-team").onclick = addTeam;
-  $("start-draft").onclick = startDraft;
-  $("export-league").onclick = exportLeague;
-  $("import-league").onchange = (event) => {
-    if (event.target.files[0]) importLeague(event.target.files[0]);
-  };
-  $("view-league").querySelectorAll("[data-up]").forEach((button) => {
+  $('save-setup').onclick = () => { saveSetup(); render(); };
+  $('add-team').onclick = addTeam;
+  $('start-draft').onclick = startDraft;
+  $('view-league').querySelectorAll('[data-up]').forEach((button) => {
     button.onclick = () => moveTeam(Number(button.dataset.up), -1);
   });
-  $("view-league").querySelectorAll("[data-down]").forEach((button) => {
+  $('view-league').querySelectorAll('[data-down]').forEach((button) => {
     button.onclick = () => moveTeam(Number(button.dataset.down), 1);
   });
-  $("view-league").querySelectorAll("[data-remove]").forEach((button) => {
+  $('view-league').querySelectorAll('[data-remove]').forEach((button) => {
     button.onclick = () => removeTeam(button.dataset.remove);
   });
 }
 
-function boardCell(team, round) {
-  const pick = activeLeague().picks.find((item) => item.teamId === team.id && item.round === round);
-  if (!pick) return '<div class="board-pick empty"></div>';
-  const dancer = dancerById(pick.dancerId);
-  return `<button class="board-pick ${dancer?.role || ""}" data-rewind="${pick.overall}" title="Pick ${pick.overall}: click to rewind here"><span>${escapeHtml(dancer?.name || "")}</span><small>${dancer?.role === "amateur" ? "Celebrity" : "Pro"}</small></button>`;
-}
-
-function renderBoard() {
-  const league = activeLeague();
-  const teams = league.teams;
-  const rows = Array.from({ length: 8 }, (_, index) => index + 1);
-
-  return `
-    <div class="board-wrap">
-      <div class="draft-board-shell">
-        <img src="1.png" class="board-art" alt="Draft the Stars board">
-        <div class="board-overlay" style="--teams:${Math.max(teams.length, 1)}">
-          <div class="board-header-spacer"></div>
-          ${teams.map((team) => `<div class="board-team-name">${escapeHtml(team.name)}</div>`).join("")}
-          ${rows.map((round) => `
-            <div class="round-label">${round}</div>
-            ${teams.map((team) => boardCell(team, round)).join("")}
-          `).join("")}
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function dancerCard(dancer) {
-  const taken = copiesTaken(dancer.id);
-  const remaining = totalCopies() - taken;
-  const allTaken = remaining === 0;
-  const eligible = isEligible(dancer);
-
-  return `
-    <button class="dancer-card ${dancer.role} ${allTaken ? "all-taken" : ""} ${eligible ? "selectable" : ""}" data-dancer="${dancer.id}" ${eligible ? "" : "disabled"}>
-      <span class="role-label">${dancer.role === "amateur" ? "Celebrity / amateur" : "Professional dancer"}</span>
-      <span class="dancer-name">${escapeHtml(dancer.name)}</span>
-      <span class="partner">with ${escapeHtml(dancer.partnerName)}</span>
-      <span class="copy-status ${allTaken ? "gone" : taken ? "one-left" : "available"}">
-        ${allTaken ? "All copies drafted" : taken ? "1 copy left" : "2 copies available"}
-      </span>
-    </button>
-  `;
-}
-
-function renderDraft() {
-  const league = activeLeague();
-  const team = onClockTeam();
-  const visibleDancers = dancers().filter((dancer) => poolFilter === "all" || dancer.role === poolFilter);
-  const setupReady = leagueReady();
-  const nextTeams = draftOrder().slice(league.picks.length, league.picks.length + 5)
-    .map((teamId) => teamById(teamId)?.name)
-    .filter(Boolean);
-
-  $("view-draft").innerHTML = `
-    <div class="card draft-command">
-      <div class="clock-layout">
-        <div>
-          <p class="eyebrow">${league.status === "live" ? `Pick ${currentPickNumber()} · Round ${roundForPick(league.picks.length)}` : "Commissioner draft room"}</p>
-          <h2>${league.status === "live" ? `On the clock: ${escapeHtml(team?.name || "")}` : league.status === "paused" ? "Draft paused" : league.status === "complete" ? "Draft complete" : "Set up your league"}</h2>
-          <p class="muted">${league.status === "live" ? `This team has ${teamRoleCount(team.id, "amateur")}/4 celebrities and ${teamRoleCount(team.id, "pro")}/4 pros.` : "Create your league and start the draft. Clicking an available dancer will place them on the board immediately."}</p>
-        </div>
-        <div class="draft-actions">
-          ${league.status === "setup" ? `<button class="primary" id="draft-start" ${setupReady ? "" : "disabled"}>Start Draft</button>` : ""}
-          ${league.status === "live" ? '<button id="pause">Pause</button><button class="oops" id="undo">OOPS · Undo</button>' : ""}
-          ${league.status === "paused" ? '<button class="primary" id="resume">Resume Draft</button><button class="oops" id="undo">OOPS · Undo</button>' : ""}
-          <button class="reset" id="reset">Reset league</button>
-        </div>
-      </div>
-      ${league.status === "setup" ? `<p class="setup-message ${setupReady ? "ready" : ""}">${setupReady ? "League setup is complete. Start when everyone is ready." : "Go to League Setup: add a league name, at least two teams, and team names."}</p>` : ""}
-      ${league.status === "live" ? `<p class="next-up"><b>Next up:</b> ${nextTeams.map(escapeHtml).join(" → ")}</p>` : ""}
-    </div>
-    ${renderBoard()}
-    <div class="card pool-controls"><div><h2>Available dancers</h2><p class="muted">Click a highlighted dancer to draft them. One copy can still be drafted by a different team; two copies makes the card unavailable.</p></div><label>Filter<select id="pool-filter"><option value="all">All dancers</option><option value="amateur">Celebrities / amateurs</option><option value="pro">Professionals</option></select></label></div>
-    <div class="dancer-grid">${visibleDancers.map(dancerCard).join("")}</div>
-  `;
-
-  $("pool-filter").value = poolFilter;
-  $("pool-filter").onchange = (event) => {
-    poolFilter = event.target.value;
-    renderDraft();
-  };
-  if ($("draft-start")) $("draft-start").onclick = startDraft;
-  if ($("pause")) $("pause").onclick = pauseDraft;
-  if ($("resume")) $("resume").onclick = resumeDraft;
-  if ($("undo")) $("undo").onclick = undoLastPick;
-  $("reset").onclick = resetLeague;
-  $("view-draft").querySelectorAll("[data-dancer]").forEach((card) => {
-    card.onclick = () => chooseDancer(card.dataset.dancer);
-  });
-  $("view-draft").querySelectorAll("[data-rewind]").forEach((cell) => {
-    cell.onclick = () => rewindToPick(Number(cell.dataset.rewind));
-  });
-}
-
 function renderRankings() {
-  const league = activeLeague();
-  const rows = league.teams.map((team) => {
-    const teamRoster = roster(team.id);
+  const teams = league.teams.map((item) => {
+    const picks = teamPicks(item.id);
     return {
-      ...team,
-      points: teamPoints(team.id),
-      mpp: maxPossiblePoints(team.id),
-      alive: teamRoster.filter((dancer) => !eliminated(dancer.coupleId)).length,
-      teamRoster
+      ...item,
+      picks,
+      points: scoreForTeam(item.id),
+      alive: picks.filter((pick) => isAlive(pick.coupleId)).length,
+      mpp: maxPossible(item.id)
     };
   }).sort((a, b) => b.points - a.points || b.mpp - a.mpp);
 
-  $("view-rankings").innerHTML = `
-    <div class="card">
-      <p class="eyebrow">${escapeHtml(league.name || "Untitled league")}</p>
-      <h2>Live rankings</h2>
-      <p class="muted">Each dancer receives the equivalent of their couple score divided by 30, multiplied by that week’s round value. Max possible points assumes perfect remaining scores for dancers whose couples are still alive.</p>
-      <div class="table-scroll"><table><thead><tr><th>Rank</th><th>Team</th><th>Points</th><th>Alive</th><th>Max possible</th><th>Roster</th></tr></thead><tbody>
-        ${rows.map((team, index) => `<tr><td class="rank">${index + 1}</td><td>${escapeHtml(team.name)}</td><td>${team.points.toFixed(2)}</td><td>${team.alive}/${team.teamRoster.length}</td><td>${team.mpp.toFixed(2)}</td><td>${team.teamRoster.map((dancer) => `<span class="roster-dot ${dancer.role}">${escapeHtml(dancer.name)}</span>`).join("") || "—"}</td></tr>`).join("")}
+  $('view-rankings').innerHTML = `
+    <div class="card"><p class="eyebrow">${safe(league.name || 'Untitled draft')}</p><h2>Rankings</h2><p class="muted">Results and rosters for this saved draft.</p>
+      <div class="table-scroll"><table><thead><tr><th>#</th><th>Team</th><th>Points</th><th>Alive</th><th>Max possible</th><th>Roster</th></tr></thead><tbody>
+        ${teams.map((item, index) => `<tr><td>${index + 1}</td><td>${safe(item.name)}</td><td>${item.points.toFixed(2)}</td><td>${item.alive}/${item.picks.length}</td><td>${item.mpp.toFixed(2)}</td><td>${item.picks.map((pick) => `<span class="roster-chip ${pick.role}">${safe(pick.name)}</span>`).join('') || '—'}</td></tr>`).join('')}
       </tbody></table></div>
     </div>
   `;
 }
 
 function renderScores() {
-  const weeks = scoreData.weeks || [];
-  $("view-scores").innerHTML = `
-    <div class="card"><h2>Weekly scores</h2><p class="muted">The scoring file can be updated after each episode. Each individual earns \(\frac{\text{couple score}}{30} \times \text{round value}\).</p>
-      ${weeks.length ? weeks.map((week) => `<h3>Week ${week.week}</h3><table><tbody>${(week.results || []).map((result) => {
+  const weeks = scores.weeks || [];
+  $('view-scores').innerHTML = `
+    <div class="card"><h2>Weekly scores</h2><p class="muted">Each dancer earns (couple score ÷ 30) × that round’s value.</p>
+      ${weeks.length ? weeks.map((week) => `<h3>Week ${week.week}</h3><table><tbody>${week.results.map((result) => {
         const couple = season.couples.find((item) => item.id === result.coupleId);
-        return `<tr><td>${escapeHtml(couple?.amateur.name || "")} / ${escapeHtml(couple?.pro.name || "")}</td><td>${result.score}/30</td><td>${result.eliminated ? "Eliminated" : "Safe"}</td></tr>`;
-      }).join("")}</tbody></table>`).join("") : "<p>No scores have been entered yet.</p>"}
+        return `<tr><td>${safe(couple?.amateur.name)} / ${safe(couple?.pro.name)}</td><td>${result.score}/30</td><td>${result.eliminated ? 'Eliminated' : 'Safe'}</td></tr>`;
+      }).join('')}</tbody></table>`).join('') : '<p>No results have been entered yet.</p>'}
     </div>
   `;
 }
 
 function showView(view) {
-  ["rankings", "draft", "scores", "league"].forEach((name) => {
-    $("view-" + name).classList.toggle("hidden", name !== view);
-    document.querySelector(`[data-view="${name}"]`)?.classList.toggle("active", name === view);
+  activeView = view;
+  ['rankings', 'draft', 'scores', 'league'].forEach((name) => {
+    $(`view-${name}`).classList.toggle('hidden', name !== view);
+    document.querySelector(`[data-view="${name}"]`)?.classList.toggle('active', name === view);
   });
 }
 
 function render() {
-  renderLeaguePicker();
-  renderSetup();
+  renderLeague();
   renderDraft();
   renderRankings();
   renderScores();
+  showView(activeView);
 }
 
 async function init() {
-  [season, scoreData] = await Promise.all([
-    fetch("data/season.json").then((response) => response.json()),
-    fetch("data/scores.json").then((response) => response.json()).catch(() => ({ weeks: [] }))
+  [season, scores] = await Promise.all([
+    fetch('data/season.json').then((response) => response.json()),
+    fetch('data/scores.json').then((response) => response.json()).catch(() => ({ weeks: [] }))
   ]);
-
-  store = loadStore();
-  activeLeagueId = store.activeLeagueId || store.leagues[0].id;
-  document.querySelectorAll("[data-view]").forEach((button) => {
+  league = loadLeague();
+  document.querySelectorAll('[data-view]').forEach((button) => {
     button.onclick = () => showView(button.dataset.view);
   });
   render();
