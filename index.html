@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DWTS Draft</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div>
+      <p class="kicker">Dancing with the Stars</p>
+      <h1>Draft &amp; Scoring</h1>
+    </div>
+    <nav>
+      <button data-view="rankings" class="active">Rankings</button>
+      <button data-view="draft">Draft</button>
+      <button data-view="scores">Scores</button>
+      <button data-view="league">League</button>
+    </nav>
+  </header>
+  <main>
+    <section id="view-rankings" class="view"></section>
+    <section id="view-draft" class="view hidden"></section>
+    <section id="view-scores" class="view hidden"></section>
+    <section id="view-league" class="view hidden"></section>
+  </main>
+  <footer>
+    <p>4 pros + 4 amateurs. Two copies of each dancer. No duplicate copies on one team.</p>
+  </footer>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+:root {
+  --bg: #120c16;
+  --panel: #1d1424;
+  --line: #3a2a45;
+  --gold: #e7c56a;
+  --pink: #e56aa8;
+  --text: #f6eef8;
+  --muted: #b9a8c4;
+  --ok: #7ad4a0;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  background: radial-gradient(1200px 500px at 10% -10%, #4a1840 0%, var(--bg) 55%);
+  color: var(--text);
+  min-height: 100vh;
+}
+.top, footer, main { max-width: 1100px; margin: 0 auto; padding: 1rem 1.25rem; }
+.top { display: flex; justify-content: space-between; gap: 1rem; align-items: end; flex-wrap: wrap; }
+.kicker { letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin: 0; font-size: 0.75rem; }
+h1 { margin: 0.2rem 0 0; font-size: 2rem; }
+nav { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+nav button, button, .file {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+  font: inherit;
+}
+nav button.active, button.primary { background: var(--gold); color: #1a1208; border-color: var(--gold); }
+.hidden { display: none !important; }
+.card {
+  background: color-mix(in srgb, var(--panel) 88%, black);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1rem;
+  margin: 0.75rem 0;
+}
+table { width: 100%; border-collapse: collapse; font-family: system-ui, sans-serif; }
+th, td { text-align: left; padding: 0.55rem 0.4rem; border-bottom: 1px solid var(--line); }
+th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.rank { color: var(--gold); font-weight: 700; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.7rem; }
+.pick {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.7rem;
+  background: #26182f;
+}
+.pick button { width: 100%; margin-top: 0.5rem; }
+.tag { font-size: 0.75rem; color: var(--pink); text-transform: uppercase; letter-spacing: 0.08em; }
+input, textarea, select {
+  width: 100%;
+  background: #140c18;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.5rem 0.65rem;
+  font: inherit;
+}
+.row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.muted { color: var(--muted); }
+.ok { color: var(--ok); }
+.warn { color: #f0b35a; }
+footer { color: var(--muted); font-size: 0.9rem; }

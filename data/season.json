@@ -1,0 +1,25 @@
+{
+  "season": 35,
+  "title": "DWTS Season 35",
+  "wikiPage": "Dancing_with_the_Stars_35",
+  "perfectCoupleScore": 30,
+  "copiesPerDancer": 2,
+  "rosterSize": { "pro": 4, "amateur": 4 },
+  "roundValues": [10, 12, 14, 16, 18, 20, 23, 26, 29, 32, 36],
+  "couples": [
+    { "id": "c01", "amateur": { "id": "a01", "name": "Julia Stiles" }, "pro": { "id": "p01", "name": "Valentin Chmerkovskiy" } },
+    { "id": "c02", "amateur": { "id": "a02", "name": "Jenna Dewan" }, "pro": { "id": "p02", "name": "Val Chmerkovskiy" } },
+    { "id": "c03", "amateur": { "id": "a03", "name": "Celebrity 3" }, "pro": { "id": "p03", "name": "Witney Carson" } },
+    { "id": "c04", "amateur": { "id": "a04", "name": "Celebrity 4" }, "pro": { "id": "p04", "name": "Daniella Karagach" } },
+    { "id": "c05", "amateur": { "id": "a05", "name": "Celebrity 5" }, "pro": { "id": "p05", "name": "Ezra Sosa" } },
+    { "id": "c06", "amateur": { "id": "a06", "name": "Celebrity 6" }, "pro": { "id": "p06", "name": "Alan Bersten" } },
+    { "id": "c07", "amateur": { "id": "a07", "name": "Celebrity 7" }, "pro": { "id": "p07", "name": "Emma Slater" } },
+    { "id": "c08", "amateur": { "id": "a08", "name": "Celebrity 8" }, "pro": { "id": "p08", "name": "Mark Ballas" } },
+    { "id": "c09", "amateur": { "id": "a09", "name": "Celebrity 9" }, "pro": { "id": "p09", "name": "Pasha Pashkov" } },
+    { "id": "c10", "amateur": { "id": "a10", "name": "Celebrity 10" }, "pro": { "id": "p10", "name": "Rylee Arnold" } },
+    { "id": "c11", "amateur": { "id": "a11", "name": "Celebrity 11" }, "pro": { "id": "p11", "name": "Gleb Savchenko" } },
+    { "id": "c12", "amateur": { "id": "a12", "name": "Celebrity 12" }, "pro": { "id": "p12", "name": "Britt Stewart" } },
+    { "id": "c13", "amateur": { "id": "a13", "name": "Celebrity 13" }, "pro": { "id": "p13", "name": "Sasha Farber" } },
+    { "id": "c14", "amateur": { "id": "a14", "name": "Celebrity 14" }, "pro": { "id": "p14", "name": "Lindsay Arnold" } }
+  ]
+}
