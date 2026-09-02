@@ -432,7 +432,7 @@ select {
   text-align: center;
 }
 
-.dancer-half.pro .availability { color: var(--pink-dark); }
+.dancer-half.pro .availability { color: var(--white); }
 
 .availability.one-left { color: var(--gold); }
 
