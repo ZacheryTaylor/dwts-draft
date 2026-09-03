@@ -260,7 +260,7 @@ select {
   position: absolute;
   top: 26.9%;
   right: 2.75%;
-  bottom: 3.1%;
+  bottom: 2.7%;
   left: 7.2%;
   display: grid;
   grid-template-columns: repeat(var(--team-count), minmax(0, 1fr));
