@@ -1,5 +1,6 @@
 const STORAGE_KEY = 'dwts-draft-v3';
 const RESET_CODE = '0000';
+const LOCK_CODE = '0000';
 
 let season;
 let scores;
@@ -29,13 +30,19 @@ function freshLeague() {
     picks: [],
     started: false,
     paused: false,
-    completed: false
+    completed: false,
+    locked: false
   };
 }
 
 function loadLeague() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || freshLeague();
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || freshLeague();
+    if (typeof data.locked !== 'boolean') {
+      data.locked = Boolean(data.completed);
+    }
+    if (data.completed) data.locked = true;
+    return data;
   } catch {
     return freshLeague();
   }
@@ -43,6 +50,34 @@ function loadLeague() {
 
 function saveLeague() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(league));
+}
+
+function askCode(code, reason) {
+  const typed = prompt(`Enter code to ${reason}:`);
+  if (typed === null) return false;
+  if (typed !== code) {
+    alert('Incorrect code. Nothing was changed.');
+    return false;
+  }
+  return true;
+}
+
+function teamsLocked() {
+  return Boolean(league.locked);
+}
+
+function lockTeams() {
+  if (!askCode(LOCK_CODE, 'lock teams and draft data')) return;
+  league.locked = true;
+  saveLeague();
+  render();
+}
+
+function unlockTeams() {
+  if (!askCode(LOCK_CODE, 'unlock teams and draft data')) return;
+  league.locked = false;
+  saveLeague();
+  render();
 }
 
 function allDancers() {
@@ -117,7 +152,9 @@ function draftOrder() {
 }
 
 function onClockId() {
-  if (!league.started || league.paused || league.completed) return null;
+  if (!league.started || league.paused || league.completed || teamsLocked()) {
+    return null;
+  }
   return draftOrder()[league.picks.length] || null;
 }
 
@@ -136,6 +173,7 @@ function canDraft(dancerId) {
   const teamId = onClockId();
 
   if (!person || !teamId) return false;
+  if (teamsLocked()) return false;
   if (copiesUsed(dancerId) >= copiesPerDancer()) return false;
   if (teamAlreadyHas(teamId, dancerId)) return false;
   if (countRole(teamId, person.role) >= rosterLimit(person.role)) return false;
@@ -144,7 +182,7 @@ function canDraft(dancerId) {
 }
 
 function addTeam() {
-  if (league.started) return;
+  if (league.started || teamsLocked()) return;
 
   if (league.teams.length >= 8) {
     alert('The included board design has room for up to 8 teams.');
@@ -161,7 +199,7 @@ function addTeam() {
 }
 
 function removeTeam(teamId) {
-  if (league.started) return;
+  if (league.started || teamsLocked()) return;
 
   league.teams = league.teams.filter((item) => item.id !== teamId);
 
@@ -170,7 +208,7 @@ function removeTeam(teamId) {
 }
 
 function moveTeam(index, direction) {
-  if (league.started) return;
+  if (league.started || teamsLocked()) return;
 
   const target = index + direction;
 
@@ -186,7 +224,7 @@ function moveTeam(index, direction) {
 }
 
 function saveSetup() {
-  if (league.started) return;
+  if (league.started || teamsLocked()) return;
 
   league.name = $('league-name')?.value.trim() || '';
 
@@ -223,6 +261,7 @@ function startDraft() {
   league.started = true;
   league.paused = false;
   league.completed = false;
+  league.locked = false;
 
   saveLeague();
   render();
@@ -251,6 +290,7 @@ function draftCopy(dancerId) {
 
   if (league.picks.length === draftOrder().length) {
     league.completed = true;
+    league.locked = true;
   }
 
   saveLeague();
@@ -258,6 +298,11 @@ function draftCopy(dancerId) {
 }
 
 function undoPick() {
+  if (teamsLocked()) {
+    alert('Teams are locked. Unlock with the code first.');
+    return;
+  }
+
   if (!league.picks.length) {
     alert('No picks have been made yet.');
     return;
@@ -277,12 +322,14 @@ function undoPick() {
 }
 
 function pauseDraft() {
+  if (teamsLocked()) return;
   league.paused = true;
   saveLeague();
   render();
 }
 
 function resumeDraft() {
+  if (teamsLocked()) return;
   league.paused = false;
   saveLeague();
   render();
@@ -358,6 +405,22 @@ function maxPossible(teamId) {
 
 function roleLabel(role) {
   return role === 'amateur' ? 'Amateur' : 'Pro';
+}
+
+function scoringFormatText() {
+  const values = (season.roundValues || []).join(', ');
+  return `
+    <div id="scoring-format" class="card hidden">
+      <h3>How scoring works</h3>
+      <p>Sportsbooks grade DWTS results from the official judge totals published each week (Wikipedia / Fandom weekly score tables). This site uses that same night-of couple score.</p>
+      <p>Each drafted dancer earns:</p>
+      <p><b>(couple score ÷ 30) × that week’s round value</b></p>
+      <p>A perfect 30/30 therefore earns the full round value. Half of a couple’s score is not split again: drafting the celebrity and the pro from the same couple earns both copies of that formula.</p>
+      <p>Round values: ${safe(values)}</p>
+      <p>Max possible assumes every dancer whose couple is still alive scores a perfect 30 for every remaining week.</p>
+      <p>Eliminated couples stop scoring after the week they go home.</p>
+    </div>
+  `;
 }
 
 function renderBoard() {
@@ -508,12 +571,29 @@ function renderPool() {
   }).join('');
 }
 
+function lockButtons() {
+  return `
+    ${
+      teamsLocked()
+        ? '<button id="unlock-teams">Unlock teams</button>'
+        : '<button id="lock-teams">Lock teams</button>'
+    }
+  `;
+}
+
+function bindLockButtons() {
+  if ($('lock-teams')) $('lock-teams').onclick = lockTeams;
+  if ($('unlock-teams')) $('unlock-teams').onclick = unlockTeams;
+}
+
 function renderDraft() {
   const clock = onClockTeam();
   const pickNumber = league.picks.length + 1;
 
   const status = league.completed
-    ? 'Draft complete'
+    ? teamsLocked()
+      ? 'Draft complete · teams locked'
+      : 'Draft complete'
     : league.paused
       ? 'Draft paused'
       : league.started
@@ -537,14 +617,16 @@ function renderDraft() {
           ${
             league.started && clock
               ? `${clock.name}: ${countRole(clock.id, 'amateur')}/4 amateurs · ${countRole(clock.id, 'pro')}/4 pros`
-              : 'Set up the league, set the order, then start the snake draft.'
+              : teamsLocked()
+                ? 'Teams and pick data are locked. Use the code to unlock.'
+                : 'Set up the league, set the order, then start the snake draft.'
           }
         </p>
       </div>
 
       <div class="draft-toolbar">
         ${
-          !league.started
+          !league.started && !teamsLocked()
             ? `
               <button
                 class="primary"
@@ -558,23 +640,24 @@ function renderDraft() {
         }
 
         ${
-          league.started && !league.completed && !league.paused
+          league.started && !league.completed && !league.paused && !teamsLocked()
             ? '<button id="pause-draft">Pause</button>'
             : ''
         }
 
         ${
-          league.paused
+          league.paused && !teamsLocked()
             ? '<button class="primary" id="resume-draft">Resume</button>'
             : ''
         }
 
         ${
-          league.started && league.picks.length
+          league.started && league.picks.length && !teamsLocked()
             ? '<button class="oops" id="undo-pick">OOPS · Undo last pick</button>'
             : ''
         }
 
+        ${lockButtons()}
         <button class="reset" id="reset-league">Reset league</button>
       </div>
     </div>
@@ -629,6 +712,7 @@ function renderDraft() {
   }
 
   $('reset-league').onclick = resetLeague;
+  bindLockButtons();
 
   $('view-draft')
     .querySelectorAll('[data-dancer]')
@@ -638,7 +722,7 @@ function renderDraft() {
 }
 
 function renderLeague() {
-  const locked = league.started;
+  const locked = league.started || teamsLocked();
 
   $('view-league').innerHTML = `
     <div class="card">
@@ -658,6 +742,7 @@ function renderLeague() {
 
       <p class="muted">
         The draft name is shown at the top of Rankings.
+        ${teamsLocked() ? ' Teams are locked until the lock code is entered.' : ''}
       </p>
 
       <h3>First-round order</h3>
@@ -721,6 +806,8 @@ function renderLeague() {
         >
           Start Draft
         </button>
+
+        ${lockButtons()}
       </div>
     </div>
   `;
@@ -732,6 +819,7 @@ function renderLeague() {
 
   $('add-team').onclick = addTeam;
   $('start-draft').onclick = startDraft;
+  bindLockButtons();
 
   $('view-league')
     .querySelectorAll('[data-up]')
@@ -781,6 +869,7 @@ function renderRankings() {
 
       <p class="muted">
         Results and rosters for this saved draft.
+        <button type="button" id="toggle-scoring">How scoring works</button>
       </p>
 
       <div class="table-scroll">
@@ -823,11 +912,28 @@ function renderRankings() {
         </table>
       </div>
     </div>
+    ${scoringFormatText()}
   `;
+
+  $('toggle-scoring').onclick = () => {
+    $('scoring-format')?.classList.toggle('hidden');
+  };
+}
+
+async function refreshOracleScores() {
+  try {
+    scores = await fetch(`data/scores.json?ts=${Date.now()}`).then((response) =>
+      response.json()
+    );
+    render();
+  } catch {
+    alert('Could not load the published weekly scores yet.');
+  }
 }
 
 function renderScores() {
   const weeks = scores.weeks || [];
+  const source = scores.source || 'Wikipedia / Fandom weekly tables';
 
   $('view-scores').innerHTML = `
     <div class="card">
@@ -835,7 +941,12 @@ function renderScores() {
 
       <p class="muted">
         Each dancer earns (couple score ÷ 30) × that round’s value.
+        Scores come from the same public weekly tables sportsbooks use to grade DWTS props (${safe(source)}).
       </p>
+
+      <div class="row">
+        <button id="refresh-scores">Refresh published scores</button>
+      </div>
 
       ${
         weeks.length
@@ -848,6 +959,8 @@ function renderScores() {
                     const couple = season.couples.find(
                       (item) => item.id === result.coupleId
                     );
+                    const value = season.roundValues?.[week.week - 1] || 0;
+                    const pts = coupleScorePoints(result.score, value);
 
                     return `
                       <tr>
@@ -857,6 +970,7 @@ function renderScores() {
                           ${safe(couple?.pro.name)}
                         </td>
                         <td>${result.score}/30</td>
+                        <td>${pts.toFixed(2)} pts</td>
                         <td>${result.eliminated ? 'Eliminated' : 'Safe'}</td>
                       </tr>
                     `;
@@ -864,10 +978,12 @@ function renderScores() {
                 </tbody>
               </table>
             `).join('')
-          : '<p>No results have been entered yet.</p>'
+          : '<p>No results have been published yet. After an episode, run the Fetch DWTS scores Action or press refresh.</p>'
       }
     </div>
   `;
+
+  $('refresh-scores').onclick = refreshOracleScores;
 }
 
 function showView(view) {
