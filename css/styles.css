@@ -228,6 +228,31 @@ select {
   pointer-events: none;
 }
 
+/* Team names above the aligned draft columns. */
+.board-team-header {
+  position: absolute;
+  top: 22.3%;
+  right: 2.75%;
+  left: 7.2%;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--team-count), minmax(0, 1fr));
+  column-gap: 15px;
+  pointer-events: none;
+}
+
+.board-team-header span {
+  min-width: 0;
+  overflow: hidden;
+  padding: 0 3px;
+  color: var(--discopink);
+  font-size: clamp(9px, 1vw, 14px);
+  font-weight: 800;
+  line-height: 1.05;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .board-overlay {
   position: absolute;
   top: 26.9%;
