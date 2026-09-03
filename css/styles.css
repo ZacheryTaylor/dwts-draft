@@ -307,13 +307,13 @@ select {
 }
 
 .board-slot.amateur {
-  border: 1px solid rgba(238, 93, 146, 0.45);
-  background: rgba(255, 225, 239, 0.94);
+  border: 1px solid var(--discopink);
+  background: var(--pink-light);
 }
 
 .board-slot.pro {
-  border: 1px solid rgba(71, 136, 203, 0.45);
-  background: rgba(228, 241, 255, 0.94);
+  border: 1px solid var(--pink-light);
+  background: var(--pro-pink);
 }
 
 .board-slot.pro b,
