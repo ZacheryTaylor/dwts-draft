@@ -439,7 +439,7 @@ select {
 .dancer-half.pro .copy-button:not(:disabled) {
   border-color: #78aadd;
   color: var(--white);
-  background: linear-gradient(180deg, #88b8e8, var(--white));
+  background: linear-gradient(180deg, #b72f66, var(--white));
 }
 
 .copy-button.picked,
