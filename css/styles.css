@@ -75,7 +75,10 @@ h3 {
 }
 
 .tagline,
-.muted,
+.muted  {
+  color: var(--discopink);
+}
+
 .partner-name {
   color: var(--white);
 }
