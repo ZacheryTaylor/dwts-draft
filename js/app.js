@@ -7,6 +7,7 @@ let scores;
 let league;
 let activeView = 'rankings';
 let playerFilter = 'all';
+let rankSort = { key: 'points', dir: 'desc' };
 
 const $ = (id) => document.getElementById(id);
 
@@ -846,7 +847,24 @@ function renderLeague() {
     });
 }
 
+function sortMark(key) {
+  if (rankSort.key !== key) return '';
+  return rankSort.dir === 'desc' ? ' ▾' : ' ▴';
+}
+
+function setRankSort(key) {
+  if (rankSort.key === key) {
+    rankSort.dir = rankSort.dir === 'desc' ? 'asc' : 'desc';
+  } else {
+    rankSort.key = key;
+    rankSort.dir = 'desc';
+  }
+  renderRankings();
+}
+
 function renderRankings() {
+  const direction = rankSort.dir === 'asc' ? 1 : -1;
+
   const teams = league.teams
     .map((item) => {
       const picks = teamPicks(item.id);
@@ -859,7 +877,12 @@ function renderRankings() {
         mpp: maxPossible(item.id)
       };
     })
-    .sort((a, b) => b.points - a.points || b.mpp - a.mpp);
+    .sort((a, b) => {
+      const left = a[rankSort.key];
+      const right = b[rankSort.key];
+      if (left === right) return b.points - a.points || b.mpp - a.mpp;
+      return left > right ? direction : -direction;
+    });
 
   $('view-rankings').innerHTML = `
     <div class="card">
@@ -878,9 +901,9 @@ function renderRankings() {
             <tr>
               <th>#</th>
               <th>Team</th>
-              <th>Points</th>
-              <th>Alive</th>
-              <th>Max possible</th>
+              <th><button type="button" class="sort-head" data-sort="points">Points${sortMark('points')}</button></th>
+              <th><button type="button" class="sort-head" data-sort="alive">Alive${sortMark('alive')}</button></th>
+              <th><button type="button" class="sort-head" data-sort="mpp">Max possible${sortMark('mpp')}</button></th>
               <th>Roster</th>
             </tr>
           </thead>
@@ -918,16 +941,23 @@ function renderRankings() {
   $('toggle-scoring').onclick = () => {
     $('scoring-format')?.classList.toggle('hidden');
   };
+
+  $('view-rankings').querySelectorAll('[data-sort]').forEach((button) => {
+    button.onclick = () => setRankSort(button.dataset.sort);
+  });
 }
 
-async function refreshOracleScores() {
+async function refreshOracleScores(silent) {
   try {
-    scores = await fetch(`data/scores.json?ts=${Date.now()}`).then((response) =>
+    const next = await fetch(`data/scores.json?ts=${Date.now()}`).then((response) =>
       response.json()
     );
-    render();
+    const before = JSON.stringify(scores);
+    const after = JSON.stringify(next);
+    scores = next;
+    if (!silent || before !== after) render();
   } catch {
-    alert('Could not load the published weekly scores yet.');
+    if (!silent) alert('Could not load the published weekly scores yet.');
   }
 }
 
@@ -983,7 +1013,7 @@ function renderScores() {
     </div>
   `;
 
-  $('refresh-scores').onclick = refreshOracleScores;
+  $('refresh-scores').onclick = () => refreshOracleScores(false);
 }
 
 function showView(view) {
@@ -1021,6 +1051,7 @@ async function init() {
   });
 
   render();
+  setInterval(() => refreshOracleScores(true), 60000);
 }
 
 init();
