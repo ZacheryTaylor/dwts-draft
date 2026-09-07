@@ -21,7 +21,7 @@
   ],
   "couples": [
     {
-      "id": "c01",
+      "id": "ravnik",
       "amateur": {
         "id": "a01",
         "name": "Tatyana Ali"
@@ -32,7 +32,7 @@
       }
     },
     {
-      "id": "c02",
+      "id": "burgess",
       "amateur": {
         "id": "a02",
         "name": "Tyler Cameron"
@@ -43,7 +43,7 @@
       }
     },
     {
-      "id": "c03",
+      "id": "bersten",
       "amateur": {
         "id": "a03",
         "name": "Giada De Laurentiis"
@@ -54,7 +54,7 @@
       }
     },
     {
-      "id": "c04",
+      "id": "chmerkovskiy",
       "amateur": {
         "id": "a04",
         "name": "Jenna Dewan"
@@ -65,7 +65,7 @@
       }
     },
     {
-      "id": "c05",
+      "id": "karagach",
       "amateur": {
         "id": "a05",
         "name": "Ezra Frech"
@@ -76,7 +76,7 @@
       }
     },
     {
-      "id": "c06",
+      "id": "pashkov",
       "amateur": {
         "id": "a06",
         "name": "Amber Glenn"
@@ -87,7 +87,7 @@
       }
     },
     {
-      "id": "c07",
+      "id": "stewart",
       "amateur": {
         "id": "a07",
         "name": "Taylor Hanson"
@@ -98,7 +98,7 @@
       }
     },
     {
-      "id": "c08",
+      "id": "ballas",
       "amateur": {
         "id": "a08",
         "name": "Maura Higgins"
@@ -109,7 +109,7 @@
       }
     },
     {
-      "id": "c09",
+      "id": "zaikman",
       "amateur": {
         "id": "a09",
         "name": "Conner Leavitt"
@@ -120,7 +120,7 @@
       }
     },
     {
-      "id": "c10",
+      "id": "armstrong",
       "amateur": {
         "id": "a10",
         "name": "Ciara Miller"
@@ -131,7 +131,7 @@
       }
     },
     {
-      "id": "c11",
+      "id": "bills",
       "amateur": {
         "id": "a11",
         "name": "Sarah Jane Nader"
@@ -142,7 +142,7 @@
       }
     },
     {
-      "id": "c12",
+      "id": "slater",
       "amateur": {
         "id": "a12",
         "name": "Jackson Olson"
@@ -153,7 +153,7 @@
       }
     },
     {
-      "id": "c13",
+      "id": "carson",
       "amateur": {
         "id": "a13",
         "name": "Guillermo Rodriguez"
@@ -164,7 +164,7 @@
       }
     },
     {
-      "id": "c14",
+      "id": "johnson",
       "amateur": {
         "id": "a14",
         "name": "Harry Shum Jr."
@@ -175,7 +175,7 @@
       }
     },
     {
-      "id": "c15",
+      "id": "sosa",
       "amateur": {
         "id": "a15",
         "name": "Julia Stiles"
@@ -186,7 +186,7 @@
       }
     },
     {
-      "id": "c16",
+      "id": "arnold",
       "amateur": {
         "id": "a16",
         "name": "Connor Wood"
