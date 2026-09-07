@@ -53,6 +53,18 @@ function saveLeague() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(league));
 }
 
+async function loadPublishedLeague() {
+  const response = await fetch(`data/league.json?ts=${Date.now()}`, {
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    throw new Error('Unable to load the official league roster.');
+  }
+
+  return response.json();
+}
+
 function askCode(code, reason) {
   const typed = prompt(`Enter code to ${reason}:`);
   if (typed === null) return false;
@@ -413,10 +425,10 @@ function scoringFormatText() {
   return `
     <div id="scoring-format" class="card hidden">
       <h3>How scoring works</h3>
-      <p>Sportsbooks grade DWTS results from the official judge totals published each week (Wikipedia / Fandom weekly score tables). This site uses that same night-of couple score.</p>
+      <p>Weekly scores are entered from confirmed published Dancing with the Stars judge totals and results.</p>
       <p>Each drafted dancer earns:</p>
       <p><b>(couple score ÷ 30) × that week’s round value</b></p>
-      <p>A perfect 30/30 therefore earns the full round value. Half of a couple’s score is not split again: drafting the celebrity and the pro from the same couple earns both copies of that formula.</p>
+      <p>A perfect 30/30 earns the full round value. The celebrity and professional from the same couple each earn the full result for their own drafted copy; points are not split in half.</p>
       <p>Round values: ${safe(values)}</p>
       <p>Max possible assumes every dancer whose couple is still alive scores a perfect 30 for every remaining week.</p>
       <p>Eliminated couples stop scoring after the week they go home.</p>
@@ -949,12 +961,19 @@ function renderRankings() {
 
 async function refreshOracleScores(silent) {
   try {
-    const next = await fetch(`data/scores.json?ts=${Date.now()}`).then((response) =>
-      response.json()
-    );
+    const response = await fetch(`data/scores.json?ts=${Date.now()}`, {
+      cache: 'no-store'
+    });
+
+    if (!response.ok) {
+      throw new Error('Unable to load published weekly scores.');
+    }
+
+    const next = await response.json();
     const before = JSON.stringify(scores);
     const after = JSON.stringify(next);
     scores = next;
+
     if (!silent || before !== after) render();
   } catch {
     if (!silent) alert('Could not load the published weekly scores yet.');
@@ -963,7 +982,7 @@ async function refreshOracleScores(silent) {
 
 function renderScores() {
   const weeks = scores.weeks || [];
-  const source = scores.source || 'Wikipedia / Fandom weekly tables';
+  const source = scores.source || 'confirmed published weekly results';
 
   $('view-scores').innerHTML = `
     <div class="card">
@@ -971,7 +990,7 @@ function renderScores() {
 
       <p class="muted">
         Each dancer earns (couple score ÷ 30) × that round’s value.
-        Scores come from the same public weekly tables sportsbooks use to grade DWTS props (${safe(source)}).
+        Scores are loaded from the published weekly results file (${safe(source)}).
       </p>
 
       <div class="row">
@@ -1008,7 +1027,7 @@ function renderScores() {
                 </tbody>
               </table>
             `).join('')
-          : '<p>No results have been published yet. After an episode, run the Fetch DWTS scores Action or press refresh.</p>'
+          : '<p>No results have been published yet. Update data/scores.json after each episode, then refresh this page.</p>'
       }
     </div>
   `;
@@ -1044,7 +1063,15 @@ async function init() {
       .catch(() => ({ weeks: [] }))
   ]);
 
-  league = loadLeague();
+  try {
+    league = await loadPublishedLeague();
+  } catch (error) {
+    console.warn(
+      'Official league file was unavailable. Loading this browser’s local draft instead.',
+      error
+    );
+    league = loadLeague();
+  }
 
   document.querySelectorAll('[data-view]').forEach((button) => {
     button.onclick = () => showView(button.dataset.view);
