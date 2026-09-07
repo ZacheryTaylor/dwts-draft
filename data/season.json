@@ -1,1 +1,200 @@
-{"season":35,"title":"DWTS Season 35","copiesPerDancer":2,"rosterSize":{"pro":4,"amateur":4},"roundValues":[10,12,14,16,18,20,23,26,29,32,36],"couples":[{"id":"c01","amateur":{"id":"a01","name":"Tatyana Ali"},"pro":{"id":"p01","name":"Jan Ravnik"}},{"id":"c02","amateur":{"id":"a02","name":"Tyler Cameron"},"pro":{"id":"p02","name":"Sharna Burgess"}},{"id":"c03","amateur":{"id":"a03","name":"Giada De Laurentiis"},"pro":{"id":"p03","name":"Alan Bersten"}},{"id":"c04","amateur":{"id":"a04","name":"Jenna Dewan"},"pro":{"id":"p04","name":"Val Chmerkovskiy"}},{"id":"c05","amateur":{"id":"a05","name":"Ezra Frech"},"pro":{"id":"p05","name":"Daniella Karagach"}},{"id":"c06","amateur":{"id":"a06","name":"Amber Glenn"},"pro":{"id":"p06","name":"Pasha Pashkov"}},{"id":"c07","amateur":{"id":"a07","name":"Taylor Hanson"},"pro":{"id":"p07","name":"Britt Stewart"}},{"id":"c08","amateur":{"id":"a08","name":"Maura Higgins"},"pro":{"id":"p08","name":"Mark Ballas"}},{"id":"c09","amateur":{"id":"a09","name":"Conner Leavitt"},"pro":{"id":"p09","name":"Adele Zaikman"}},{"id":"c10","amateur":{"id":"a10","name":"Ciara Miller"},"pro":{"id":"p10","name":"Brandon Armstrong"}},{"id":"c11","amateur":{"id":"a11","name":"Sarah Jane Nader"},"pro":{"id":"p11","name":"Hailey Bills"}},{"id":"c12","amateur":{"id":"a12","name":"Jackson Olson"},"pro":{"id":"p12","name":"Emma Slater"}},{"id":"c13","amateur":{"id":"a13","name":"Guillermo Rodriguez"},"pro":{"id":"p13","name":"Witney Carson"}},{"id":"c14","amateur":{"id":"a14","name":"Harry Shum Jr."},"pro":{"id":"p14","name":"Jenna Johnson"}},{"id":"c15","amateur":{"id":"a15","name":"Julia Stiles"},"pro":{"id":"p15","name":"Ezra Sosa"}},{"id":"c16","amateur":{"id":"a16","name":"Connor Wood"},"pro":{"id":"p16","name":"Rylee Arnold"}}]}
+{
+  "season": 35,
+  "title": "DWTS Season 35",
+  "copiesPerDancer": 2,
+  "rosterSize": {
+    "pro": 4,
+    "amateur": 4
+  },
+  "roundValues": [
+    10,
+    12,
+    14,
+    16,
+    18,
+    20,
+    23,
+    26,
+    29,
+    32,
+    36
+  ],
+  "couples": [
+    {
+      "id": "c01",
+      "amateur": {
+        "id": "a01",
+        "name": "Tatyana Ali"
+      },
+      "pro": {
+        "id": "p01",
+        "name": "Jan Ravnik"
+      }
+    },
+    {
+      "id": "c02",
+      "amateur": {
+        "id": "a02",
+        "name": "Tyler Cameron"
+      },
+      "pro": {
+        "id": "p02",
+        "name": "Sharna Burgess"
+      }
+    },
+    {
+      "id": "c03",
+      "amateur": {
+        "id": "a03",
+        "name": "Giada De Laurentiis"
+      },
+      "pro": {
+        "id": "p03",
+        "name": "Alan Bersten"
+      }
+    },
+    {
+      "id": "c04",
+      "amateur": {
+        "id": "a04",
+        "name": "Jenna Dewan"
+      },
+      "pro": {
+        "id": "p04",
+        "name": "Val Chmerkovskiy"
+      }
+    },
+    {
+      "id": "c05",
+      "amateur": {
+        "id": "a05",
+        "name": "Ezra Frech"
+      },
+      "pro": {
+        "id": "p05",
+        "name": "Daniella Karagach"
+      }
+    },
+    {
+      "id": "c06",
+      "amateur": {
+        "id": "a06",
+        "name": "Amber Glenn"
+      },
+      "pro": {
+        "id": "p06",
+        "name": "Pasha Pashkov"
+      }
+    },
+    {
+      "id": "c07",
+      "amateur": {
+        "id": "a07",
+        "name": "Taylor Hanson"
+      },
+      "pro": {
+        "id": "p07",
+        "name": "Britt Stewart"
+      }
+    },
+    {
+      "id": "c08",
+      "amateur": {
+        "id": "a08",
+        "name": "Maura Higgins"
+      },
+      "pro": {
+        "id": "p08",
+        "name": "Mark Ballas"
+      }
+    },
+    {
+      "id": "c09",
+      "amateur": {
+        "id": "a09",
+        "name": "Conner Leavitt"
+      },
+      "pro": {
+        "id": "p09",
+        "name": "Adele Zaikman"
+      }
+    },
+    {
+      "id": "c10",
+      "amateur": {
+        "id": "a10",
+        "name": "Ciara Miller"
+      },
+      "pro": {
+        "id": "p10",
+        "name": "Brandon Armstrong"
+      }
+    },
+    {
+      "id": "c11",
+      "amateur": {
+        "id": "a11",
+        "name": "Sarah Jane Nader"
+      },
+      "pro": {
+        "id": "p11",
+        "name": "Hailey Bills"
+      }
+    },
+    {
+      "id": "c12",
+      "amateur": {
+        "id": "a12",
+        "name": "Jackson Olson"
+      },
+      "pro": {
+        "id": "p12",
+        "name": "Emma Slater"
+      }
+    },
+    {
+      "id": "c13",
+      "amateur": {
+        "id": "a13",
+        "name": "Guillermo Rodriguez"
+      },
+      "pro": {
+        "id": "p13",
+        "name": "Witney Carson"
+      }
+    },
+    {
+      "id": "c14",
+      "amateur": {
+        "id": "a14",
+        "name": "Harry Shum Jr."
+      },
+      "pro": {
+        "id": "p14",
+        "name": "Jenna Johnson"
+      }
+    },
+    {
+      "id": "c15",
+      "amateur": {
+        "id": "a15",
+        "name": "Julia Stiles"
+      },
+      "pro": {
+        "id": "p15",
+        "name": "Ezra Sosa"
+      }
+    },
+    {
+      "id": "c16",
+      "amateur": {
+        "id": "a16",
+        "name": "Connor Wood"
+      },
+      "pro": {
+        "id": "p16",
+        "name": "Rylee Arnold"
+      }
+    }
+  ]
+}
