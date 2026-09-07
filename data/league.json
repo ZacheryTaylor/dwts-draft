@@ -1,0 +1,556 @@
+{
+  "name": "Drafting With The Stars",
+  "teams": [
+    {
+      "id": "team-1788811794805-zld5yg",
+      "name": "Takes Two To Tango"
+    },
+    {
+      "id": "team-1788811795300-nvyvzb",
+      "name": "JoWithTheFlow"
+    },
+    {
+      "id": "team-1788811795743-wz8gun",
+      "name": "Carol's Mirrorball Mafia"
+    },
+    {
+      "id": "team-1788811796209-thnedu",
+      "name": "Mirrorball (Abby's Version)"
+    },
+    {
+      "id": "team-1788811796672-31rd4k",
+      "name": "Mirrorball Occasionally"
+    },
+    {
+      "id": "team-1788811797263-vgioz9",
+      "name": "The Underdogs"
+    },
+    {
+      "id": "team-1788811801121-3piud9",
+      "name": "Disko Kate"
+    },
+    {
+      "id": "team-1788811802013-g3djy4",
+      "name": "ChaChaChuck"
+    }
+  ],
+  "picks": [
+    {
+      "id": "pick-1788813144805-mzta11",
+      "overall": 1,
+      "round": 1,
+      "teamId": "team-1788811794805-zld5yg",
+      "dancerId": "p04",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813167701-ho6ypj",
+      "overall": 2,
+      "round": 1,
+      "teamId": "team-1788811795300-nvyvzb",
+      "dancerId": "a14",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813216197-v1d4fv",
+      "overall": 3,
+      "round": 1,
+      "teamId": "team-1788811795743-wz8gun",
+      "dancerId": "p08",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813231390-9r4mga",
+      "overall": 4,
+      "round": 1,
+      "teamId": "team-1788811796209-thnedu",
+      "dancerId": "a14",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788813248232-ko1ft4",
+      "overall": 5,
+      "round": 1,
+      "teamId": "team-1788811796672-31rd4k",
+      "dancerId": "p15",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813286847-bliugl",
+      "overall": 6,
+      "round": 1,
+      "teamId": "team-1788811797263-vgioz9",
+      "dancerId": "p04",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788813330839-mbeq2d",
+      "overall": 7,
+      "round": 1,
+      "teamId": "team-1788811801121-3piud9",
+      "dancerId": "a04",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813345189-0vawyf",
+      "overall": 8,
+      "round": 1,
+      "teamId": "team-1788811802013-g3djy4",
+      "dancerId": "p14",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813357127-wjyrps",
+      "overall": 9,
+      "round": 2,
+      "teamId": "team-1788811802013-g3djy4",
+      "dancerId": "a04",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788813370999-vsj201",
+      "overall": 10,
+      "round": 2,
+      "teamId": "team-1788811801121-3piud9",
+      "dancerId": "a06",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813443553-w3qjh8",
+      "overall": 11,
+      "round": 2,
+      "teamId": "team-1788811797263-vgioz9",
+      "dancerId": "p14",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788813467136-zmtcrn",
+      "overall": 12,
+      "round": 2,
+      "teamId": "team-1788811796672-31rd4k",
+      "dancerId": "p16",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813482624-ltc62h",
+      "overall": 13,
+      "round": 2,
+      "teamId": "team-1788811796209-thnedu",
+      "dancerId": "p06",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813504456-ozz5ae",
+      "overall": 14,
+      "round": 2,
+      "teamId": "team-1788811795743-wz8gun",
+      "dancerId": "a06",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788813542116-mh8xk5",
+      "overall": 15,
+      "round": 2,
+      "teamId": "team-1788811795300-nvyvzb",
+      "dancerId": "p05",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813606709-394lwt",
+      "overall": 16,
+      "round": 2,
+      "teamId": "team-1788811794805-zld5yg",
+      "dancerId": "a15",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813633651-9d9x89",
+      "overall": 17,
+      "round": 3,
+      "teamId": "team-1788811794805-zld5yg",
+      "dancerId": "p16",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788813675688-nn3fng",
+      "overall": 18,
+      "round": 3,
+      "teamId": "team-1788811795300-nvyvzb",
+      "dancerId": "a08",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813721918-ixl7no",
+      "overall": 19,
+      "round": 3,
+      "teamId": "team-1788811795743-wz8gun",
+      "dancerId": "p05",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788813757808-10ng40",
+      "overall": 20,
+      "round": 3,
+      "teamId": "team-1788811796209-thnedu",
+      "dancerId": "p08",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788813768279-rjbmhn",
+      "overall": 21,
+      "round": 3,
+      "teamId": "team-1788811796672-31rd4k",
+      "dancerId": "a15",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788813847572-jubtgr",
+      "overall": 22,
+      "round": 3,
+      "teamId": "team-1788811797263-vgioz9",
+      "dancerId": "p06",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788813856922-iivx9g",
+      "overall": 23,
+      "round": 3,
+      "teamId": "team-1788811801121-3piud9",
+      "dancerId": "p15",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788813870816-j4guez",
+      "overall": 24,
+      "round": 3,
+      "teamId": "team-1788811802013-g3djy4",
+      "dancerId": "a02",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813874574-sxdqyp",
+      "overall": 25,
+      "round": 4,
+      "teamId": "team-1788811802013-g3djy4",
+      "dancerId": "p02",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788813934667-kxvskq",
+      "overall": 26,
+      "round": 4,
+      "teamId": "team-1788811801121-3piud9",
+      "dancerId": "a12",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814011239-70ehrk",
+      "overall": 27,
+      "round": 4,
+      "teamId": "team-1788811797263-vgioz9",
+      "dancerId": "a05",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814041114-lfwtpq",
+      "overall": 28,
+      "round": 4,
+      "teamId": "team-1788811796672-31rd4k",
+      "dancerId": "a02",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814055472-jag5qt",
+      "overall": 29,
+      "round": 4,
+      "teamId": "team-1788811796209-thnedu",
+      "dancerId": "a05",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814091764-vvfbou",
+      "overall": 30,
+      "round": 4,
+      "teamId": "team-1788811795743-wz8gun",
+      "dancerId": "a12",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814121083-w2q9sm",
+      "overall": 31,
+      "round": 4,
+      "teamId": "team-1788811795300-nvyvzb",
+      "dancerId": "p02",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814137572-oez77p",
+      "overall": 32,
+      "round": 4,
+      "teamId": "team-1788811794805-zld5yg",
+      "dancerId": "a08",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814160468-bg3hq0",
+      "overall": 33,
+      "round": 5,
+      "teamId": "team-1788811794805-zld5yg",
+      "dancerId": "a16",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814220674-ksm1pr",
+      "overall": 34,
+      "round": 5,
+      "teamId": "team-1788811795300-nvyvzb",
+      "dancerId": "a16",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814257062-hhfyi8",
+      "overall": 35,
+      "round": 5,
+      "teamId": "team-1788811795743-wz8gun",
+      "dancerId": "p03",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814268287-mxahw1",
+      "overall": 36,
+      "round": 5,
+      "teamId": "team-1788811796209-thnedu",
+      "dancerId": "p12",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814274639-b91rq1",
+      "overall": 37,
+      "round": 5,
+      "teamId": "team-1788811796672-31rd4k",
+      "dancerId": "p12",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814340269-3xz3tc",
+      "overall": 38,
+      "round": 5,
+      "teamId": "team-1788811797263-vgioz9",
+      "dancerId": "a10",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814351586-jgr5o3",
+      "overall": 39,
+      "round": 5,
+      "teamId": "team-1788811801121-3piud9",
+      "dancerId": "p10",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814363316-3woc9f",
+      "overall": 40,
+      "round": 5,
+      "teamId": "team-1788811802013-g3djy4",
+      "dancerId": "a07",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814367787-uhq9m5",
+      "overall": 41,
+      "round": 6,
+      "teamId": "team-1788811802013-g3djy4",
+      "dancerId": "p07",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814381882-waz37x",
+      "overall": 42,
+      "round": 6,
+      "teamId": "team-1788811801121-3piud9",
+      "dancerId": "p07",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814432277-7qalt4",
+      "overall": 43,
+      "round": 6,
+      "teamId": "team-1788811797263-vgioz9",
+      "dancerId": "p10",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814442998-5hyapa",
+      "overall": 44,
+      "round": 6,
+      "teamId": "team-1788811796672-31rd4k",
+      "dancerId": "a10",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814474718-5g5fui",
+      "overall": 45,
+      "round": 6,
+      "teamId": "team-1788811796209-thnedu",
+      "dancerId": "a07",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814489355-8t5cio",
+      "overall": 46,
+      "round": 6,
+      "teamId": "team-1788811795743-wz8gun",
+      "dancerId": "a03",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814541572-x9lh9n",
+      "overall": 47,
+      "round": 6,
+      "teamId": "team-1788811795300-nvyvzb",
+      "dancerId": "p03",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814591561-3k1a04",
+      "overall": 48,
+      "round": 6,
+      "teamId": "team-1788811794805-zld5yg",
+      "dancerId": "p11",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814657675-nimtl0",
+      "overall": 49,
+      "round": 7,
+      "teamId": "team-1788811794805-zld5yg",
+      "dancerId": "a09",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814693639-azzrjh",
+      "overall": 50,
+      "round": 7,
+      "teamId": "team-1788811795300-nvyvzb",
+      "dancerId": "a03",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814722877-2m8jy8",
+      "overall": 51,
+      "round": 7,
+      "teamId": "team-1788811795743-wz8gun",
+      "dancerId": "a09",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814770547-8jk0ql",
+      "overall": 52,
+      "round": 7,
+      "teamId": "team-1788811796209-thnedu",
+      "dancerId": "p11",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814777135-61ue7n",
+      "overall": 53,
+      "round": 7,
+      "teamId": "team-1788811796672-31rd4k",
+      "dancerId": "a13",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814789553-1zrnzh",
+      "overall": 54,
+      "round": 7,
+      "teamId": "team-1788811797263-vgioz9",
+      "dancerId": "a11",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814796906-pidau4",
+      "overall": 55,
+      "round": 7,
+      "teamId": "team-1788811801121-3piud9",
+      "dancerId": "a11",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814806273-awl3s8",
+      "overall": 56,
+      "round": 7,
+      "teamId": "team-1788811802013-g3djy4",
+      "dancerId": "a01",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814808047-xknkj3",
+      "overall": 57,
+      "round": 8,
+      "teamId": "team-1788811802013-g3djy4",
+      "dancerId": "p01",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814813627-8jumav",
+      "overall": 58,
+      "round": 8,
+      "teamId": "team-1788811801121-3piud9",
+      "dancerId": "p01",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814909312-bcqeh9",
+      "overall": 59,
+      "round": 8,
+      "teamId": "team-1788811797263-vgioz9",
+      "dancerId": "a13",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814921860-jic0av",
+      "overall": 60,
+      "round": 8,
+      "teamId": "team-1788811796672-31rd4k",
+      "dancerId": "p09",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814935212-c59u26",
+      "overall": 61,
+      "round": 8,
+      "teamId": "team-1788811796209-thnedu",
+      "dancerId": "a01",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814979098-2rbq37",
+      "overall": 62,
+      "round": 8,
+      "teamId": "team-1788811795743-wz8gun",
+      "dancerId": "p09",
+      "copy": 2
+    },
+    {
+      "id": "pick-1788814984243-12akhc",
+      "overall": 63,
+      "round": 8,
+      "teamId": "team-1788811795300-nvyvzb",
+      "dancerId": "p13",
+      "copy": 1
+    },
+    {
+      "id": "pick-1788814985982-g361b9",
+      "overall": 64,
+      "round": 8,
+      "teamId": "team-1788811794805-zld5yg",
+      "dancerId": "p13",
+      "copy": 2
+    }
+  ],
+  "started": true,
+  "paused": false,
+  "completed": true,
+  "locked": true,
+  "lockedAt": "2026-09-07T21:23:00.000Z"
+}
