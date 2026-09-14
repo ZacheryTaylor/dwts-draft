@@ -524,6 +524,18 @@ th {
   background: var(--pro-pink);
 }
 
+.roster-chip.amateur.eliminated {
+  border: 1px solid #b8b8b8;
+  color: #222222;
+  background: #dedede;
+}
+
+.roster-chip.pro.eliminated {
+  border: 1px solid #4f4f4f;
+  color: var(--white);
+  background: #555555;
+}
+
 footer {
   color: var(--muted);
   font-size: 12px;
