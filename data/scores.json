@@ -1,7 +1,92 @@
 {
   "source": "Confirmed Dancing with the Stars weekly judge scores and elimination results",
-  "updatedAt": null,
+  "updatedAt": "2026-09-16T03:00:00.000Z",
   "weeks": [
+    {
+      "week": 1,
+      "label": "Premiere Night 1",
+      "maxScore": 30,
+      "results": [
+        {
+          "coupleId": "ravnik",
+          "score": 22,
+          "eliminated": true
+        },
+        {
+          "coupleId": "burgess",
+          "score": 20,
+          "eliminated": false
+        },
+        {
+          "coupleId": "bersten",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "chmerkovskiy",
+          "score": 23,
+          "eliminated": false
+        },
+        {
+          "coupleId": "karagach",
+          "score": 21,
+          "eliminated": false
+        },
+        {
+          "coupleId": "pashkov",
+          "score": 25,
+          "eliminated": false
+        },
+        {
+          "coupleId": "stewart",
+          "score": 19,
+          "eliminated": false
+        },
+        {
+          "coupleId": "ballas",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "zaikman",
+          "score": 18,
+          "eliminated": false
+        },
+        {
+          "coupleId": "armstrong",
+          "score": 22,
+          "eliminated": false
+        },
+        {
+          "coupleId": "bills",
+          "score": 20,
+          "eliminated": false
+        },
+        {
+          "coupleId": "slater",
+          "score": 23,
+          "eliminated": false
+        },
+        {
+          "coupleId": "carson",
+          "score": 21,
+          "eliminated": false
+        },
+        {
+          "coupleId": "johnson",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "sosa",
+          "score": 22,
+          "eliminated": false
+        },
+        {
+          "coupleId": "arnold",
+          "score": 20,
+          "eliminated": false
+        }
       ]
     }
   ]
