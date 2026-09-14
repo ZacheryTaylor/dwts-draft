@@ -933,7 +933,7 @@ function renderRankings() {
                     item.picks
                       .map(
                         (pick) => `
-                          <span class="roster-chip ${pick.role}">
+                          <span class="roster-chip ${pick.role} ${isAlive(pick.coupleId) ? '' : 'eliminated'}">
                             ${safe(pick.name)}
                           </span>
                         `
