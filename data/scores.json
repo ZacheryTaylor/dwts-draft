@@ -10,7 +10,7 @@
         {
           "coupleId": "ravnik",
           "score": 22,
-          "eliminated": false
+          "eliminated": true
         },
         {
           "coupleId": "burgess",
