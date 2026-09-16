@@ -1,6 +1,93 @@
 {
   "source": "Confirmed Dancing with the Stars weekly judge scores and elimination results",
-  "updatedAt": null,
+  "updatedAt": "2026-09-16T03:00:00.000Z",
   "weeks": [
+    {
+      "week": 1,
+      "label": "Premiere Night 1",
+      "maxScore": 30,
+      "results": [
+        {
+          "coupleId": "ravnik",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "burgess",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "bersten",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "chmerkovskiy",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "karagach",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "pashkov",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "stewart",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "ballas",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "zaikman",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "armstrong",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "bills",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "slater",
+          "score": 15,
+          "eliminated": false
+        },
+        {
+          "coupleId": "carson",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "johnson",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "sosa",
+          "score": ,
+          "eliminated": false
+        },
+        {
+          "coupleId": "arnold",
+          "score": ,
+          "eliminated": false
+        }
+      ]
+    }
   ]
 }
