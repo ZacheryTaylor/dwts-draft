@@ -9,7 +9,7 @@
       "results": [
         {
           "coupleId": "ravnik",
-          "score": 0,
+          "score": 12,
           "eliminated": false
         },
         {
@@ -19,12 +19,12 @@
         },
         {
           "coupleId": "bersten",
-          "score": 0,
+          "score": 16,
           "eliminated": false
         },
         {
           "coupleId": "chmerkovskiy",
-          "score": 0,
+          "score": 19,
           "eliminated": false
         },
         {
@@ -34,7 +34,7 @@
         },
         {
           "coupleId": "pashkov",
-          "score": 0,
+          "score": 18,
           "eliminated": false
         },
         {
@@ -44,7 +44,7 @@
         },
         {
           "coupleId": "ballas",
-          "score": 0,
+          "score": 21,
           "eliminated": false
         },
         {
@@ -54,13 +54,13 @@
         },
         {
           "coupleId": "armstrong",
-          "score": 0,
+          "score": 15,
           "eliminated": false
         },
         {
           "coupleId": "bills",
-          "score": 0,
-          "eliminated": false
+          "score": 14,
+          "eliminated": true
         },
         {
           "coupleId": "slater",
@@ -79,7 +79,7 @@
         },
         {
           "coupleId": "sosa",
-          "score": 0,
+          "score": 18,
           "eliminated": false
         },
         {
