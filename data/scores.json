@@ -3,6 +3,78 @@
   "updatedAt": "2026-09-23",
   "weeks": [
     {
+      "week": 3,
+      "label": "Yacht Rock Night",
+      "maxScore": 30,
+      "results": [
+        {
+          "coupleId": "ravnik",
+          "score": 21,
+          "eliminated": false
+        },
+        {
+          "coupleId": "burgess",
+          "score": 17,
+          "eliminated": false
+        },
+        {
+          "coupleId": "chmerkovskiy",
+          "score": 21,
+          "eliminated": false
+        },
+        {
+          "coupleId": "karagach",
+          "score": 21,
+          "eliminated": false
+        },
+        {
+          "coupleId": "pashkov",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "stewart",
+          "score": 18,
+          "eliminated": true
+        },
+        {
+          "coupleId": "ballas",
+          "score": 22,
+          "eliminated": false
+        },
+        {
+          "coupleId": "armstrong",
+          "score": 18,
+          "eliminated": false
+        },
+        {
+          "coupleId": "slater",
+          "score": 18,
+          "eliminated": false
+        },
+        {
+          "coupleId": "carson",
+          "score": 15,
+          "eliminated": false
+        },
+        {
+          "coupleId": "johnson",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "sosa",
+          "score": 19,
+          "eliminated": false
+        },
+        {
+          "coupleId": "arnold",
+          "score": 20,
+          "eliminated": false
+        }
+      ]
+    },
+    {
       "week": 2,
       "label": "Viral Hits Night",
       "maxScore": 30,
