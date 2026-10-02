@@ -1,0 +1,83 @@
+name: Auto score (Wikipedia, permanent judges only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run: report only, write nothing"
+        type: boolean
+        default: true
+  schedule:
+    # DWTS airs Tuesdays 8-10 PM ET. Times are UTC:
+    # every 30 min Wed 01:00-08:30 UTC  = Tue 8 PM - Wed 3:30 AM CT (Wikipedia usually updates within hours)
+    - cron: "*/30 1-8 * * 3"
+    # follow-up checks Wed 14:00 / 22:00 UTC and Thu 14:00 UTC to pick up late edits and results
+    - cron: "0 14,22 * * 3"
+    - cron: "0 14 * * 4"
+
+concurrency:
+  group: auto-score
+  cancel-in-progress: false
+
+jobs:
+  score:
+    # Scheduled runs ONLY on the live repo. In staging (or any fork) the schedule is a
+    # no-op; manual dispatch still works and can only write to the repo it runs in.
+    if: github.repository == 'ZacheryTaylor/dwts-draft' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # push data/scores.json to THIS repo only (GITHUB_TOKEN is repo-scoped)
+      pages: write      # read Pages build status (and request a build only if the push did not start one)
+    steps:
+      - name: Guard - only the live repo or its staging copy may write
+        run: |
+          case "$GITHUB_REPOSITORY" in
+            ZacheryTaylor/dwts-draft|ZacheryTaylor/dwts-draft-staging) echo "Target repo: $GITHUB_REPOSITORY (writes go here only)";;
+            *) echo "Refusing to run in $GITHUB_REPOSITORY"; exit 1;;
+          esac
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Offline tests (parser + scoring)
+        run: |
+          node tests/test-auto-score.mjs
+          node tests/verify-scoring.mjs tests/fixtures/original-app.js data
+      - name: Pull scores (dry run)
+        if: github.event_name == 'workflow_dispatch' && inputs.dry_run
+        run: node scripts/auto-score.mjs --dry-run
+      - name: Pull scores and merge (never overwrites; conflicts fail the job)
+        if: github.event_name == 'schedule' || !inputs.dry_run
+        run: node scripts/auto-score.mjs
+      - name: Validate merged data before committing
+        if: github.event_name == 'schedule' || !inputs.dry_run
+        run: |
+          node -e "const s=require('./data/scores.json'); if(!Array.isArray(s.weeks)) throw new Error('weeks missing'); for (const w of s.weeks) for (const r of w.results) { if (!(r.score>=0 && r.score<=30)) throw new Error('bad score '+JSON.stringify(r)); } console.log('scores.json OK:', s.weeks.length, 'weeks, updatedAt', s.updatedAt)"
+          node tests/verify-scoring.mjs tests/fixtures/original-app.js data | tail -1
+          git diff --stat -- data
+      - name: Commit new scores
+        id: commit
+        if: github.event_name == 'schedule' || !inputs.dry_run
+        run: |
+          if git diff --quiet -- data/scores.json data/auto-score-log.json; then echo "No new scores."; echo "pushed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/scores.json data/auto-score-log.json
+          git commit -m "Auto score: permanent-judge totals from Wikipedia"
+          git pull --rebase --autostash
+          git push
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+      - name: Confirm Pages deployed the new data
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # The push triggers the Pages build. Wait for it; only request a build if none appears.
+          SHA=$(git rev-parse HEAD)
+          for i in $(seq 1 30); do
+            OK=$(gh api "repos/$GITHUB_REPOSITORY/pages/builds?per_page=5" --jq "[.[] | select(.commit == \"$SHA\" and .status == \"built\")] | length")
+            if [ "$OK" -gt 0 ]; then echo "Pages built $SHA"; exit 0; fi
+            if [ "$i" -eq 16 ]; then gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" --jq .status || true; fi
+            sleep 10
+          done
+          echo "::error::Pages did not finish building $SHA within 5 minutes"; exit 1
