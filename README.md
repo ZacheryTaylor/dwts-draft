@@ -2,7 +2,7 @@
 
 A Dancing with the Stars fantasy draft and scoring site. Search and share it as **DWTS Draft**.
 
-- Live: https://zacherytaylor.github.io/dwts-draft/ (repo `ZacheryTaylor/dwts-draft`)
+- Live: https://draftthestars.com/ (repo `ZacheryTaylor/dwts-draft`; the old https://zacherytaylor.github.io/dwts-draft/ redirects here)
 - Staging: https://zacherytaylor.github.io/dwts-draft-staging/ (repo `ZacheryTaylor/dwts-draft-staging`). Changes are made and checked there first. See [STAGING.md](STAGING.md).
 
 ## Rules
