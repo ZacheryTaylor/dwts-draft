@@ -9,5 +9,26 @@
     ],
     "conflicts": [],
     "flags": []
+  },
+  {
+    "runAt": "2026-10-07T02:04:51.549Z",
+    "revid": 1378949627,
+    "applied": [
+      "Week 4: NEW week \"Mariah Carey Night\" (round value 16) with 12 couples",
+      "Week 4 ravnik: +score 20 from 20 (6, 7, 7)",
+      "Week 4 burgess: +score 21 from 21 (7, 7, 7)",
+      "Week 4 chmerkovskiy: +score 24 from 24 (8, 8, 8)",
+      "Week 4 karagach: +score 24 from 24 (8, 8, 8)",
+      "Week 4 pashkov: +score 23 from 23 (7, 8, 8)",
+      "Week 4 ballas: +score 25 from 25 (9, 8, 8)",
+      "Week 4 armstrong: +score 21 (eliminated) from 21 (7, 7, 7)",
+      "Week 4 slater: +score 21 from 21 (7, 7, 7)",
+      "Week 4 carson: +score 13 from 13 (4, 4, 5)",
+      "Week 4 johnson: +score 24 from 24 (8, 8, 8)",
+      "Week 4 sosa: +score 21 from 21 (7, 7, 7)",
+      "Week 4 arnold: +score 19 from 19 (6, 6, 7)"
+    ],
+    "conflicts": [],
+    "flags": []
   }
 ]

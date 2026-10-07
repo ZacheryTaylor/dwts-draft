@@ -1,7 +1,75 @@
 {
   "source": "Confirmed Dancing with the Stars weekly judge scores and elimination results",
-  "updatedAt": "2026-10-02T20:37:52.298Z",
+  "updatedAt": "2026-10-07T02:04:51.548Z",
   "weeks": [
+    {
+      "week": 4,
+      "name": "Mariah Carey Night",
+      "label": "Mariah Carey Night",
+      "maxScore": 30,
+      "results": [
+        {
+          "coupleId": "ravnik",
+          "score": 20,
+          "eliminated": false
+        },
+        {
+          "coupleId": "burgess",
+          "score": 21,
+          "eliminated": false
+        },
+        {
+          "coupleId": "chmerkovskiy",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "karagach",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "pashkov",
+          "score": 23,
+          "eliminated": false
+        },
+        {
+          "coupleId": "ballas",
+          "score": 25,
+          "eliminated": false
+        },
+        {
+          "coupleId": "armstrong",
+          "score": 21,
+          "eliminated": true
+        },
+        {
+          "coupleId": "slater",
+          "score": 21,
+          "eliminated": false
+        },
+        {
+          "coupleId": "carson",
+          "score": 13,
+          "eliminated": false
+        },
+        {
+          "coupleId": "johnson",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "sosa",
+          "score": 21,
+          "eliminated": false
+        },
+        {
+          "coupleId": "arnold",
+          "score": 19,
+          "eliminated": false
+        }
+      ]
+    },
     {
       "week": 3,
       "label": "Yacht Rock Night",
