@@ -1,7 +1,70 @@
 {
   "source": "Confirmed Dancing with the Stars weekly judge scores and elimination results",
-  "updatedAt": "2026-10-07T02:04:51.548Z",
+  "updatedAt": "2026-10-14T02:51:39.135Z",
   "weeks": [
+    {
+      "week": 5,
+      "name": "Super Bowl Night",
+      "label": "Super Bowl Night",
+      "maxScore": 30,
+      "results": [
+        {
+          "coupleId": "ravnik",
+          "score": 21,
+          "eliminated": false
+        },
+        {
+          "coupleId": "burgess",
+          "score": 22,
+          "eliminated": false
+        },
+        {
+          "coupleId": "chmerkovskiy",
+          "score": 27,
+          "eliminated": false
+        },
+        {
+          "coupleId": "karagach",
+          "score": 27,
+          "eliminated": false
+        },
+        {
+          "coupleId": "pashkov",
+          "score": 25,
+          "eliminated": false
+        },
+        {
+          "coupleId": "ballas",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "slater",
+          "score": 23,
+          "eliminated": false
+        },
+        {
+          "coupleId": "carson",
+          "score": 16,
+          "eliminated": true
+        },
+        {
+          "coupleId": "johnson",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "sosa",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "arnold",
+          "score": 18,
+          "eliminated": false
+        }
+      ]
+    },
     {
       "week": 4,
       "name": "Mariah Carey Night",
