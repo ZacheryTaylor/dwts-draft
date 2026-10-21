@@ -1,7 +1,65 @@
 {
   "source": "Confirmed Dancing with the Stars weekly judge scores and elimination results",
-  "updatedAt": "2026-10-14T02:51:39.135Z",
+  "updatedAt": "2026-10-21T02:17:23.107Z",
   "weeks": [
+    {
+      "week": 6,
+      "name": "Dedication Night",
+      "label": "Dedication Night",
+      "maxScore": 30,
+      "results": [
+        {
+          "coupleId": "ravnik",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "burgess",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "chmerkovskiy",
+          "score": 28,
+          "eliminated": false
+        },
+        {
+          "coupleId": "karagach",
+          "score": 27,
+          "eliminated": false
+        },
+        {
+          "coupleId": "pashkov",
+          "score": 28,
+          "eliminated": false
+        },
+        {
+          "coupleId": "ballas",
+          "score": 26,
+          "eliminated": false
+        },
+        {
+          "coupleId": "slater",
+          "score": 24,
+          "eliminated": false
+        },
+        {
+          "coupleId": "johnson",
+          "score": 27,
+          "eliminated": false
+        },
+        {
+          "coupleId": "sosa",
+          "score": 27,
+          "eliminated": false
+        },
+        {
+          "coupleId": "arnold",
+          "score": 24,
+          "eliminated": false
+        }
+      ]
+    },
     {
       "week": 5,
       "name": "Super Bowl Night",

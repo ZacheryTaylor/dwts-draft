@@ -50,5 +50,24 @@
     ],
     "conflicts": [],
     "flags": []
+  },
+  {
+    "runAt": "2026-10-21T02:17:23.109Z",
+    "revid": 1381257040,
+    "applied": [
+      "Week 6: NEW week \"Dedication Night\" (round value 20) with 10 couples (guest judge dropped: Kym Johnson)",
+      "Week 6 ravnik: +score 24 from 32 (8, 8, 8, 8) guest 8 dropped",
+      "Week 6 burgess: +score 24 from 32 (8, 8, 8, 8) guest 8 dropped",
+      "Week 6 chmerkovskiy: +score 28 from 37 (10, 9, 9, 9) guest 9 dropped",
+      "Week 6 karagach: +score 27 from 37 (9, 9, 10, 9) guest 10 dropped",
+      "Week 6 pashkov: +score 28 from 38 (10, 9, 10, 9) guest 10 dropped",
+      "Week 6 ballas: +score 26 from 35 (8, 9, 9, 9) guest 9 dropped",
+      "Week 6 slater: +score 24 from 32 (8, 8, 8, 8) guest 8 dropped",
+      "Week 6 johnson: +score 27 from 36 (9, 9, 9, 9) guest 9 dropped",
+      "Week 6 sosa: +score 27 from 36 (9, 9, 9, 9) guest 9 dropped",
+      "Week 6 arnold: +score 24 from 32 (8, 8, 8, 8) guest 8 dropped"
+    ],
+    "conflicts": [],
+    "flags": []
   }
 ]
